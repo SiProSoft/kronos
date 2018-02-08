@@ -36,7 +36,8 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        &nbsp;
+                        <li><a href="{{ route('projects.index') }}">Projects</a></li>
+                        <li><a href="{{ route('tasks.index') }}">Tasks</a></li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -70,6 +71,10 @@
                 </div>
             </div>
         </nav>
+
+        <div class="container">
+            @include('inc.messages')
+        </div>
 
         @yield('content')
     </div>
