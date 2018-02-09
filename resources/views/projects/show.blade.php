@@ -12,10 +12,12 @@
             </div>
         {!! Form::close() !!}          --}}
     @else
-        {!! Form::open(['action' => ['ProjectsController@startTimer', 0], 'method' => 'POST']) !!}
+        {!! Form::open(['action' => 'TimerController@start', 'method' => 'POST']) !!}
             <div class="form-group">
-                {{ Form::submit('Start timer', ['class' => 'btn btn-success']) }}
+                {{ Form::submit('Start working on this project', ['class' => 'btn btn-success']) }}
             </div>
+
+            {{ Form::hidden('project', $project->id)}}
         {!! Form::close() !!}
     @endif
 
@@ -50,7 +52,7 @@
             {{ Form::hidden('projectid', $project->id) }}
             <div class="col-sm-4 form-group">
                 <div><label for="">&nbsp;</label></div>
-                {{ Form::submit('Create task', ['class' => 'btn btn-danger']) }}
+                {{ Form::submit('Create task', ['class' => 'btn btn-primary']) }}
             </div>
             
         </div>
@@ -65,11 +67,19 @@
                     {{ $task->title }} - {{ $task->displaySum() }}
 
                     <div class="pull-right">
-                        {!! Form::open(['action' => ['ProjectsController@startTimer', $task->id], 'method' => 'POST']) !!}
-                            <div class="form-group">
-                                {{ Form::submit('Start timer', ['class' => 'btn btn-success']) }}
-                            </div>
+                        
+                    @if ($runningTimeEntry && $runningTimeEntry->task && $runningTimeEntry->task->id == $task->id)
+                        <a href="/timer/{{ $runningTimeEntry->id }}/stop" class="btn btn-danger">Stop timer</a>
+                    @else
+                        {!! Form::open(['action' => 'TimerController@start', 'method' => 'POST']) !!}
+                        <div class="form-group">
+                            {{ Form::hidden('task', $task->id)}}
+                            {{ Form::hidden('project', $project->id)}}
+                            {{ Form::submit('Start timer', ['class' => 'btn btn-success']) }}
+                        </div>
                         {!! Form::close() !!}
+                    @endif
+                        
                     </div>
             </div>
             </div>

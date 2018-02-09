@@ -14,15 +14,17 @@ class Task extends Model
         return $this->hasMany('App\TimeEntry');
     }
 
-    public function users() {
-        return $this->hasManyThrough('App\User', 'App\Project');
+    public function user() {
+        return $this->belongsTo('App\User');
     }
 
     public function displaySum() {
         $time = 0;
         
         foreach ($this->timeEntries as $te) {
-            $time += $te->getTime();
+            if ($te->end) {
+                $time += $te->getTime();
+            }
         } 
         
         $sum = sprintf('%02d:%02d:%02d', ($time/3600),($time/60%60), $time%60);

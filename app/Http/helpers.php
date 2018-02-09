@@ -1,8 +1,6 @@
 <?php
 
-function str_spacecase($slug)
+function showAsTime($seconds)
 {
-
-    return str_replace("_", " ", $slug);
-
+    return sprintf('%02d:%02d:%02d', ($seconds/3600),($seconds/60%60), $seconds%60);
 }

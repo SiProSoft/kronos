@@ -25,10 +25,14 @@ Route::post('projects/{id}/stop', ['uses' => 'ProjectsController@stopTimer', 'as
 
 // Timer
 Route::get('timer/start', 'TimerController@start')->name('timer.start');
+Route::post('timer/start', 'TimerController@start')->name('timer.start');
 Route::get('timer/{id}/stop', 'TimerController@stop')->name('timer.stop');
 Route::post('timer/{id}/update', 'TimerController@update')->name('timer.stop');
 
 // Resources
 Route::resource('projects', 'ProjectsController');
 Route::resource('tasks', 'TasksController');
+Route::resource('timeentries', 'TimeEntriesController');
+
+
 

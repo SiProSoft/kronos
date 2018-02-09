@@ -8,8 +8,9 @@ class Project extends Model
 {
 
     public function timeEntries() {
-        return $this->hasManyThrough('App\TimeEntry', 'App\Task');
+        return $this->hasMany('App\TimeEntry');
     }
+    
     public function tasks() {
         return $this->hasMany('App\Task'); 
     }

@@ -17,8 +17,10 @@ class CreateTimeEntriesTable extends Migration
             $table->increments('id');
             $table->datetime('start');
             $table->datetime('end')->nullable();
+            $table->integer('project_id')->nullable();
             $table->integer('task_id')->nullable();
             $table->integer('user_id');
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }

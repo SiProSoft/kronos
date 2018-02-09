@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\TimeEntry;
 
 class DashboardController extends Controller
 {
@@ -23,6 +24,24 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('dashboard');
+        $timeEntries = TimeEntry::all()->filter(function($t) {
+            return $t->end != null;
+        });
+        
+        // $times = array();
+        $times = $timeEntries->map(function($t) {
+            return $t->getTime();
+        });
+        // $timeSum = "";
+        $timeSum = array_sum($times->toArray());
+
+        $timeSum = showAsTime($timeSum);
+        // return $times;
+        
+        $selectProjects = auth()->user()->projects->mapWithKeys(function($project) {
+            return [$project->id => $project->title];
+        });
+
+        return view('dashboard')->with(['timeEntries' => $timeEntries, 'sum' => $timeSum, 'selectProjects' => $selectProjects]);
     }
 }

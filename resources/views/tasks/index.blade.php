@@ -10,7 +10,7 @@
             @foreach ($tasks as $task)
             <div class="panel panel-default">
                 <div class="panel-body">
-                    {{ $task->title }} - {{ $task->project->title }}
+                    {{ $task->title }} - {{ $task->project ? $task->project->title : "No Project" }}
                 <div class="pull-right">
                     <span class="pull-left"><a href="/tasks/{{$task->id}}/edit" class="btn btn-sm btn-default">Edit</a></span>
                     <span class="pull-left">
