@@ -18,24 +18,17 @@ class AppServiceProvider extends ServiceProvider
         //
         Schema::defaultStringLength(191);
 
-        // Check running timer
-        // if (auth()->user()) {
-        //     $userId = auth()->user()->id;
-        //     $runningTimeEntry = TimeEntry::where(['user_id' => $userId , 'end' => null])->first();
-        //     view()->share('runningTimeEntry', $runningTimeEntry);
-        // }
-
-
         view()->composer('*', function($view) {
+            $runningTimeEntry = null;
+
             if (auth()->user()) {
                 $userId = auth()->user()->id;
                 $runningTimeEntry = TimeEntry::where(['user_id' => $userId , 'end' => null])->first();
-                $view->with('runningTimeEntry', $runningTimeEntry);
             }
+            
+            $view->with('runningTimeEntry', $runningTimeEntry);
 
         });
-        
-        
     }
 
     /**

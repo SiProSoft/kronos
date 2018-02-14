@@ -9,24 +9,31 @@
 
                 <div class="panel-body">
                     @foreach($timeEntries as $timeEntry)
-                    <div class="row form-group">
-                        <div class="col-sm-4">
-                            @php
-                                $currentProject = $timeEntry->project ? $timeEntry->project->id : null;
-                            @endphp
-                            {{ Form::select('project', $selectProjects, $currentProject, ['class' => 'form-control', 'placeholder' => 'No Project']) }}
-                        </div>
-                        <div class="col-sm-4">
-                            @php
-                                $selectedTasks = $timeEntry->project ? $timeEntry->project->tasks->mapWithKeys(function($task) {
-                                    return [$task->id => $task->title];
-                                }) : [];
-                                $currentTask = $timeEntry->task ? $timeEntry->task->id : null;
-                            @endphp
+                    
+                    <div>
+                        <p>
+                            {{ $timeEntry->description }}
+                        </p>
+                        <div class="row form-group">
+                            <div class="col-sm-4">
+                                @php
+                                    $currentProject = $timeEntry->project ? $timeEntry->project->id : null;
+                                @endphp
+                                {{ Form::select('project', $selectProjects, $currentProject, ['class' => 'form-control', 'placeholder' => 'No Project']) }}
+                            </div>
+                            <div class="col-sm-4">
+                                @php
+                                    $selectedTasks = $timeEntry->project ? $timeEntry->project->tasks->mapWithKeys(function($task) {
+                                        return [$task->id => $task->title];
+                                    }) : [];
+                                    $currentTask = $timeEntry->task ? $timeEntry->task->id : null;
+                                @endphp
 
-                            {{ Form::select('task', $selectedTasks , $currentTask, ['class' => 'form-control', 'placeholder' => 'No Task']) }}
+                                {{ Form::select('task', $selectedTasks , $currentTask, ['class' => 'form-control', 'placeholder' => 'No Task']) }}
+                            </div>
+                            <div class="col-sm-4">{{ $timeEntry->displayTime() }}</div>
+
                         </div>
-                        <div class="col-sm-4">{{ $timeEntry->displayTime() }}</div>
                     </div>
                     @endforeach
                 </div>

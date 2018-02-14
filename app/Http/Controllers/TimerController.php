@@ -4,35 +4,50 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\TimeEntry;
+use App\Project;
+use App\Task;
 
 class TimerController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function start(Request $request) {
  
         $this->stopTimer();
 
         $timeEntry = new TimeEntry;
  
-        // $project = $request->input('project');
+        // $project = Project::find($request->input('task'));
+        // if (!$project) {
+        //     $project = auth()->user()->getDefaultProject();
+        // }
         
+        // $task = Task::find($request->input('task'));
+
+        // if (!$task) {
+        //     $task = $project->getDefaultTask();
+        // }
+
         $timeEntry->start = NOW();
         $timeEntry->user_id = auth()->user()->id;
         $timeEntry->task_id = $request->input('task');
-        $timeEntry->project_id = $request->input('project');
         $timeEntry->description = $request->input('description');
         $timeEntry->save();
 
         return redirect(url()->previous());
     }
 
-    public function stop($id) {
-        $timeEntry = TimeEntry::find($id);
-
-        if ($timeEntry) {
-            $timeEntry->end = NOW();
-            $timeEntry->save();
-        }
-
+    public function stop() {
+        $this->stopTimer();
+        
         return redirect(url()->previous());
     }
 

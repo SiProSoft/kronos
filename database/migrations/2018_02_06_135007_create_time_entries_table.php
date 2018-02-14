@@ -15,10 +15,10 @@ class CreateTimeEntriesTable extends Migration
     {
         Schema::create('time_entries', function (Blueprint $table) {
             $table->increments('id');
-            $table->datetime('start');
+            $table->datetime('start')->default(NOW());
             $table->datetime('end')->nullable();
-            $table->integer('project_id')->nullable();
-            $table->integer('task_id')->nullable();
+            // $table->integer('project_id')->nullable();
+            $table->integer('task_id');
             $table->integer('user_id');
             $table->string('description')->nullable();
             $table->timestamps();

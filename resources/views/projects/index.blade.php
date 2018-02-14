@@ -3,27 +3,11 @@
 @section('content')
 <div class="container">
 
-    @if (session('status'))
-        <div class="alert alert-success">
-            {{ session('status') }}
-        </div>
-    @endif
+    <h4>Projects</h4>
+    <br>
 
-    {!! Form::open(['action' => 'ProjectsController@store', 'method' => 'POST']) !!}
-    <div class="form-group">
-        {{ Form::label('title', 'Project title') }}
-        {{ Form::text('title', '', ['class' => 'form-control', 'placeholder' => 'Project title']) }}
-    </div>
-    <div class="form-group">
-        {{ Form::label('description', 'Description') }}
-        {{ Form::text('description', '', ['class' => 'form-control', 'placeholder' => 'Description']) }}
-    </div>
-
-    <div class="form-group">
-        {{ Form::submit('Submit', ['class' => 'btn btn-primary']) }}
-    </div>
-    {!! Form::close() !!}
-
+    @include('inc.forms.project-form', ['project' => null])
+    
     <hr>
 
     <div class="row">

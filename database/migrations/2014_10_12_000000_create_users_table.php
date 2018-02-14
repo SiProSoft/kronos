@@ -20,16 +20,18 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
+            $table->boolean('is_superuser')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });
 
 
-        $user = new user;
-        $user->name = "Signar Kristiansen";
-        $user->email = "signar@siprosoft.com";
-        $user->password = '$2y$10$PIplAFzPnI/HVprjKUHF/OW4MZjfmloOZpr4N2bZTsH0B2TcnCetq';
-        $user->save();
+        // $user = new user;
+        // $user->name = "Signar Kristiansen";
+        // $user->email = "signar@siprosoft.com";
+        // $user->password = '$2y$10$PIplAFzPnI/HVprjKUHF/OW4MZjfmloOZpr4N2bZTsH0B2TcnCetq';
+        // $user->is_superuser = true;
+        // $user->save();
 
     }
 

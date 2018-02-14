@@ -2,12 +2,22 @@
 
 namespace App;
 
+use App\Scopes\HiddenScope;
 use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
 {
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is_hidden' => 'boolean',
+    ];
+
     public function project() {
-        return $this->belongsTo('App\Project');
+        return $this->belongsTo('App\Project')->withoutGlobalScopes();;
     }
 
     public function timeEntries() {
@@ -30,5 +40,21 @@ class Task extends Model
         $sum = sprintf('%02d:%02d:%02d', ($time/3600),($time/60%60), $time%60);
 
         return $sum;
+    }
+
+
+    // ---------------
+    public static function boot()
+    {
+        parent::boot();
+        static::addGlobalScope(new HiddenScope);
+        
+        self::deleting(function($model) {
+            $timeEntries = TimeEntry::withoutGlobalScopes()->where('task_id', $model->id)->get();
+
+            $timeEntries->each(function($te) {
+                $te->delete();
+            });
+        });
     }
 }

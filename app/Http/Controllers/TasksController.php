@@ -8,15 +8,26 @@ use App\Task;
 class TasksController extends Controller
 {
     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        //
         $tasks = auth()->user()->tasks;
-        return view('tasks.index')->with('tasks', $tasks);
+        $projects = auth()->user()->projects->pluck('title', 'id');
+        
+        return view('tasks.index')->with(['tasks' => $tasks, 'projects' => $projects]);
     }
 
     /**
@@ -26,8 +37,8 @@ class TasksController extends Controller
      */
     public function create()
     {
-        //
-        return view('tasks.create');
+        $projects = auth()->user()->projects->pluck('title', 'id');
+        return view('tasks.create')->with('projects', $projects);
     }
 
     /**
@@ -38,23 +49,16 @@ class TasksController extends Controller
      */
     public function store(Request $request)
     {
-        //
-
-        $this->validate($request, [
-            'title' => 'required',
-            'description' => 'required',
-        ]);
+        $this->validateTask($request);
 
         $task = new Task;
-        $task->title = $request->input('title');
-        $task->description = $request->input('description');
-        $task->completed = false;
-        $task->project_id = $request->input('projectid');
-        $task->user_id = auth()->user()->id;
-        $task->save();
+        $this->updateTask($task, $request);
+
+        if ($request->input('redirect')) {
+            return redirect($request->input('redirect'));
+        }
 
         return redirect(url()->previous());
-        
     }
     
 
@@ -77,9 +81,9 @@ class TasksController extends Controller
      */
     public function edit($id)
     {
-        //
         $task = Task::find($id);
-        return view('tasks.edit')->with('task', $task);
+        $projects = auth()->user()->projects->pluck('title', 'id');
+        return view('tasks.edit')->with(['task' => $task, 'projects' => $projects]);
     }
 
     /**
@@ -91,25 +95,18 @@ class TasksController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
-            'title' => 'required',
-            'description' => 'required',
-        ]);
+        $this->validateTask($request);
 
         $task = Task::find($id);
-        updateTask($task, $request);
+        $this->updateTask($task, $request);
 
-        return redirect('/tasks');
+        if ($request->input('redirect')) {
+            return redirect($request->input('redirect'));
+        }
+        
+        return redirect(route('tasks.index'));
     }
-
-    private function updateTask($task, $request) {
-        $task->title = $request->input('title');
-        $task->description = $request->input('description');
-        $task->completed = false;
-        $task->project_id = 1;
-        $task->save();
-    }
-
+    
     /**
      * Remove the specified resource from storage.
      *
@@ -118,11 +115,31 @@ class TasksController extends Controller
      */
     public function destroy($id)
     {
-        //
-
         $task = Task::find($id);
         $task->delete();
 
-        return redirect('/tasks')->with('success', 'Task deleted');
+        return redirect(url()->previous());
+        // return redirect(route('tasks.index'))->with('success', 'Task deleted');
     }
+
+
+
+
+    
+    private function validateTask($request) {
+        $this->validate($request, [
+            'title' => 'required',
+            // 'description' => 'required',
+        ]);
+    }
+
+    private function updateTask($task, $request) {
+        $task->title = $request->input('title');
+        $task->description = $request->input('description');
+        $task->project_id = $request->input('project');
+        $task->completed = $task->completed ?? false;
+        $task->user_id = $task->user_id ?? auth()->user()->id;
+        $task->save();
+    }
+
 }

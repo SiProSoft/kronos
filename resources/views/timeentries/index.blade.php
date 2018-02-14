@@ -6,12 +6,12 @@
         <h4>Time Entries</h4>
         <br>
         {{--  <div><a href="/timeentries/create">Create a task</a></div>  --}}
-        @if (count($timeEntries) > 0)
+        @if (count($timeEntries))
             @foreach ($timeEntries as $timeEntry)
             <div class="panel panel-default">
                 <div class="panel-body">
-                    {{ $timeEntry->displayTime() }} - {{ $timeEntry->project ? $timeEntry->project->title : "No Project" }} - {{ $timeEntry->task ? $timeEntry->task->title : "No Task" }}
 
+                    {{--  Edit/Delete buttons  --}}
                     <div class="pull-right">
                         <span class="pull-left"><a href="/timeentries/{{$timeEntry->id}}/edit" class="btn btn-sm btn-default">Edit</a></span>
                         <span class="pull-left">
@@ -21,6 +21,11 @@
                             {!! Form::close() !!}
                         </span>
                     </div>
+                          
+                    <div>
+                        {{ $timeEntry->displayTime() }} - {{ $timeEntry->getProject()->title }} - {{ $timeEntry->task->title }}
+                    </div>
+                    <div>{{$timeEntry->description}}</div>
                 </div>
                 
             </div>

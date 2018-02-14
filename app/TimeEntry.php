@@ -8,11 +8,14 @@ class TimeEntry extends Model
 {
     //
     public function task() {
-        return $this->belongsTo('App\Task');
+        return $this->belongsTo('App\Task')->withoutGlobalScopes();
     }
 
-    public function project() {
-        return $this->belongsTo('App\Project');
+    public function getProject() {
+        $task = $this->task;
+        $project = $task ? $task->project : null;
+        
+        return $project;
     }
 
     public function getTime() {

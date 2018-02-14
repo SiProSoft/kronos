@@ -10,13 +10,22 @@ use App\TimeEntry;
 class ProjectsController extends Controller
 {
     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        //
         $projects = auth()->user()->projects;
         return view('projects.index')->with('projects', $projects);
     }
@@ -39,19 +48,26 @@ class ProjectsController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        $this->validate($request, [
-            'title' => 'required',
-            'description' => 'required',
-        ]);
+        $this->validateProject($request);
 
         $project = new Project;
+        $this->updateProject($project, $request);
+
+        return redirect(route('projects.index'));
+    }
+
+    private function validateProject($request) {
+        $this->validate($request, [
+            'title' => 'required',
+            // 'description' => 'required',
+        ]);
+    }
+
+    private function updateProject($project, $request) {
         $project->title = $request->input('title');
-        $project->description = $request->input('description');
+        $project->description = $request->input('description') ?? "";
         $project->user_id = auth()->user()->id;
         $project->save();
-
-        return redirect('/projects');
     }
 
     /**
@@ -62,32 +78,25 @@ class ProjectsController extends Controller
      */
     public function show($id)
     {
-        $userId = auth()->user()->id;
+        $user = auth()->user();
 
-        $runningTimeEntry = TimeEntry::where(['user_id' => $userId , 'end' => null])->first();
-        // $timeEntry = TimeEntry::where(['user_id' => $id, 'end' => null])->first();
+        $runningTimeEntry = $user->getRunningTimeEntry();
 
-        // $timeEntries = TimeEntry::where(['user_id' => $userId])->whereNotNull('end')->orderBy('id', 'desc')->get();
         $project = Project::find($id);
-        $timeEntries = $project->timeEntries->filter(function($time) {
+
+        $timeEntries = $project->timeEntries()->filter(function($time) {
             return $time->end != null;
         });
 
-        // $timeEntries = $project->timeEntries;
+        $sumInSeconds = getSumInSecondsFromTimeEntries($timeEntries);
         
-        $sum = 0;
-
-        foreach ($timeEntries as $entry) {
-            $sum += $entry->getTime();
-        }
-
-        $sumTime = sprintf('%02d:%02d:%02d', ($sum/3600),($sum/60%60), $sum%60);
+        $sumFormatted = showAsTime($sumInSeconds);
 
         return view('projects.show')->with([
             'project' => $project, 
             'runningTimeEntry' => $runningTimeEntry, 
             'timeEntries' => $timeEntries,
-            'sum' => $sumTime
+            'sum' => $sumFormatted
         ]);
     }
 
@@ -99,7 +108,8 @@ class ProjectsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $project = Project::find($id);
+        return view('projects.edit')->with('project', $project);
     }
 
     /**
@@ -111,7 +121,13 @@ class ProjectsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validateProject($request);
+
+        $project = Project::find($id);
+        $this->updateProject($project, $request);
+
+        return redirect(route('projects.index'));
+
     }
 
     /**
@@ -122,27 +138,30 @@ class ProjectsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $project = Project::find($id);
+        $project->delete();
+
+        return redirect(route('projects.index'));
     }
 
-    public function startTimer($id) {
-        $userId = auth()->user()->id;
+    // public function startTimer($id) {
+    //     $userId = auth()->user()->id;
 
-        $runningTimeEntry = TimeEntry::where(['user_id' => $userId , 'end' => null])->first();
+    //     $runningTimeEntry = TimeEntry::where(['user_id' => $userId , 'end' => null])->first();
 
-        if ($runningTimeEntry) {
-            $runningTimeEntry->end = NOW();
-            $runningTimeEntry->save();
-        }
+    //     if ($runningTimeEntry) {
+    //         $runningTimeEntry->end = NOW();
+    //         $runningTimeEntry->save();
+    //     }
 
-        $timeEntry = new TimeEntry;
-        $timeEntry->start = NOW();
-        $timeEntry->task_id = $id > 0 ? $id : null;
-        $timeEntry->user_id = $userId;
-        $timeEntry->save();
+    //     $timeEntry = new TimeEntry;
+    //     $timeEntry->start = NOW();
+    //     $timeEntry->task_id = $id > 0 ? $id : null;
+    //     $timeEntry->user_id = $userId;
+    //     $timeEntry->save();
         
-        return redirect(url()->previous());
-    }
+    //     return redirect(url()->previous());
+    // }
 
     // public function stopTimer($id) {
     //     $timeEntry = TimeEntry::find($id);

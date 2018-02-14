@@ -2,23 +2,30 @@
 
 @section('content')
 <div class="container">
-    {{--  {{ $timeentry }}  --}}
     
-    @if ($runningTimeEntry)
-        <a href="/timer/{{ $runningTimeEntry->id }}/stop" class="btn btn-danger">Stop timer</a>
-        {{--  {!! Form::open(['action' => ['ProjectsController@stopTimer', $runningTimeEntry->id], 'method' => 'POST']) !!}
-            <div class="form-group">
-                {{ Form::submit('Stop timer', ['class' => 'btn btn-danger']) }}
-            </div>
-        {!! Form::close() !!}          --}}
-    @else
-        {!! Form::open(['action' => 'TimerController@start', 'method' => 'POST']) !!}
-            <div class="form-group">
-                {{ Form::submit('Start working on this project', ['class' => 'btn btn-success']) }}
-            </div>
+    <div class="pull-right">
+        <a href="{{route('projects.edit', $project->id)}}" class="btn btn-default pull-left">Edit</a>
 
-            {{ Form::hidden('project', $project->id)}}
+        {!! Form::open(['action' => ['ProjectsController@destroy', $project->id], 'method' => 'POST', 'class' => 'pull-right']) !!}
+            <div class="form-group">
+                {{ Form::submit('Delete', ['class' => 'btn btn-danger']) }}
+            </div>
+        
+            {{ Form::hidden('_method', 'DELETE') }}
         {!! Form::close() !!}
+    </div>
+
+    @if ($runningTimeEntry)
+        @if ($runningTimeEntry->getProject()->id == $project->id)
+            @include('inc.timer.stop', ['runningTimeEntry' => $runningTimeEntry])
+        {{--  <a href="/timer/{{ $runningTimeEntry->id }}/stop" class="btn btn-danger">Stop timer</a>  --}}
+        @else
+            <div>Timer is running for another project</div>
+            @include('inc.timer.start', ['taskId' => $project->getDefaultTask()->id])
+        @endif
+        
+    @else
+        @include('inc.timer.start', ['taskId' => $project->getDefaultTask()->id])
     @endif
 
     {{--  <a href="#">Start timer</a>  --}}
@@ -49,41 +56,36 @@
                 {{ Form::text('description', null, ['class' => 'form-control', 'placeholder' => 'Description'] ) }}
             </div>
 
-            {{ Form::hidden('projectid', $project->id) }}
+            {{ Form::hidden('project', $project->id) }}
             <div class="col-sm-4 form-group">
                 <div><label for="">&nbsp;</label></div>
                 {{ Form::submit('Create task', ['class' => 'btn btn-primary']) }}
             </div>
-            
         </div>
 
         {{ Form::hidden('redirect', '') }}
-    {!! Form::close() !!}        
+    {!! Form::close() !!}
 
     @if (count($project->tasks) > 0)
         @foreach ($project->tasks as $task)
         <div class="panel panel-default">
-                <div class="panel-body">
-                    {{ $task->title }} - {{ $task->displaySum() }}
+            <div class="panel-body">
 
-                    <div class="pull-right">
-                        
+                <div class="pull-right">
+                    
                     @if ($runningTimeEntry && $runningTimeEntry->task && $runningTimeEntry->task->id == $task->id)
-                        <a href="/timer/{{ $runningTimeEntry->id }}/stop" class="btn btn-danger">Stop timer</a>
+                        @include('inc.timer.stop', ['runningTimeEntry' => $runningTimeEntry])
                     @else
-                        {!! Form::open(['action' => 'TimerController@start', 'method' => 'POST']) !!}
-                        <div class="form-group">
-                            {{ Form::hidden('task', $task->id)}}
-                            {{ Form::hidden('project', $project->id)}}
-                            {{ Form::submit('Start timer', ['class' => 'btn btn-success']) }}
-                        </div>
-                        {!! Form::close() !!}
+                        @include('inc.timer.start', ['taskId' => $task->id])
                     @endif
                         
                     </div>
+
+                {{ $task->title }} - {{ $task->displaySum() }}
+                <div>{{ $task->description }}</div>
+
             </div>
-            </div>
-            {{--  <div>Id: {{ $entry->id }}, {{ $entry->displayTime() }}</div>      --}}
+        </div>
         @endforeach
     @else
         <div>No tasks on this project</div>
@@ -100,7 +102,7 @@
 
         <div class="panel panel-default">
             <div class="panel-body">
-                {{$entry->task ? $entry->task->title : "No task" }} - {{ $entry->displayTime()}}
+                {{ $entry->task->title }} - {{ $entry->displayTime() }}
             </div>
         </div>
 

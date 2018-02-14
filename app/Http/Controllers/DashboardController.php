@@ -24,24 +24,21 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $timeEntries = TimeEntry::all()->filter(function($t) {
-            return $t->end != null;
-        });
-        
-        // $times = array();
-        $times = $timeEntries->map(function($t) {
-            return $t->getTime();
-        });
-        // $timeSum = "";
-        $timeSum = array_sum($times->toArray());
+        $user = auth()->user();
 
-        $timeSum = showAsTime($timeSum);
-        // return $times;
+        $timeEntries = TimeEntry::where('user_id', $user->id)->whereNotNull('end')->get();
+
+        $sumInSeconds = getSumInSecondsFromTimeEntries($timeEntries);
+        $sumFormated = showAsTime($sumInSeconds);
         
-        $selectProjects = auth()->user()->projects->mapWithKeys(function($project) {
+        $selectProjects = $user->projects->mapWithKeys(function($project) {
             return [$project->id => $project->title];
         });
 
-        return view('dashboard')->with(['timeEntries' => $timeEntries, 'sum' => $timeSum, 'selectProjects' => $selectProjects]);
+        return view('dashboard')->with([
+            'timeEntries' => $timeEntries, 
+            'sum' => $sumFormated, 
+            'selectProjects' => $selectProjects
+        ]);
     }
 }

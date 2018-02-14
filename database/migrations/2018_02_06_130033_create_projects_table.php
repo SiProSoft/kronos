@@ -18,17 +18,18 @@ class CreateProjectsTable extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->integer('user_id');
+            $table->boolean('is_hidden')->default(false);
             $table->timestamps();
         });
 
 
-        $project = new Project;
-        $project->title = 'Accounting Software';
-        $project->description = 'This is the description for accounting software';
-        $project->user_id = 1;
-        $project->save();
+        // $project = new Project;
+        // $project->title = 'Accounting Software';
+        // $project->description = 'This is the description for accounting software';
+        // $project->user_id = 1;
+        // $project->save();
     }
 
     /**

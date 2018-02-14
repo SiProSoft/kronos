@@ -9,13 +9,26 @@ use App\Task;
 class TimeEntriesController extends Controller
 {
     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $timeEntries = TimeEntry::all();
+        $user = auth()->user();
+
+        $timeEntries = $user->getTimeEntries();
+
         return view('timeentries.index')->with('timeEntries', $timeEntries);
     }
 
@@ -67,7 +80,7 @@ class TimeEntriesController extends Controller
         });
 
         // return $projects->toArray();
-        $tasks = ($timeEntry->project ? $timeEntry->project->tasks : Task::where(['user_id' => $userId, 'project_id' => null])->get())->mapWithKeys(function($t) {
+        $tasks = $timeEntry->getProject()->tasks->mapWithKeys(function($t) {
             return [$t->id => $t->title];
         });
         
@@ -86,16 +99,23 @@ class TimeEntriesController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->validate($request, [
+            'start' => 'required',
+            'end' => 'required'
+        ]);
+
         $timeEntry = TimeEntry::find($id);
 
         // $timeEntry->start = NOW();
         // $timeEntry->user_id = auth()->user()->id;
+        $timeEntry->start = $request->input('start');
+        $timeEntry->end = $request->input('end');
         $timeEntry->task_id = $request->input('task');
-        $timeEntry->project_id = $request->input('project');
+        // $timeEntry->project_id = $request->input('project');
         $timeEntry->description = $request->input('description');
         $timeEntry->save();
 
-        return redirect('/timeentries');
+        return redirect(route('timeentries.index'));
     }
 
     /**
