@@ -31,6 +31,10 @@ class Project extends Model
         return $this->hasMany('App\Task'); 
     }
 
+    public function getTasksWithoutGlobalScopes() {
+        return Task::withoutGlobalScopes()->where('project_id', $this->id)->get();
+    }
+
     public function user() {
         return $this->belongsTo('App\User');
     }

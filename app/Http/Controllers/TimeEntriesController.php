@@ -75,12 +75,12 @@ class TimeEntriesController extends Controller
         $userId = auth()->user()->id;
         
         $timeEntry = TimeEntry::find($id);
-        $projects = auth()->user()->projects->mapWithKeys(function($p) {
+        $projects = auth()->user()->projectsWithoutHiddenScope()->mapWithKeys(function($p) {
             return [$p->id => $p->title];
         });
 
         // return $projects->toArray();
-        $tasks = $timeEntry->getProject()->tasks->mapWithKeys(function($t) {
+        $tasks = $timeEntry->getProject()->getTasksWithoutGlobalScopes()->mapWithKeys(function($t) {
             return [$t->id => $t->title];
         });
         
@@ -100,18 +100,15 @@ class TimeEntriesController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'start' => 'required',
-            'end' => 'required'
+            'start' => 'required|date',
+            'end' => 'required|date|after:start'
         ]);
 
         $timeEntry = TimeEntry::find($id);
 
-        // $timeEntry->start = NOW();
-        // $timeEntry->user_id = auth()->user()->id;
         $timeEntry->start = $request->input('start');
         $timeEntry->end = $request->input('end');
         $timeEntry->task_id = $request->input('task');
-        // $timeEntry->project_id = $request->input('project');
         $timeEntry->description = $request->input('description');
         $timeEntry->save();
 
@@ -129,6 +126,6 @@ class TimeEntriesController extends Controller
         $timeEntry = TimeEntry::find($id);
         $timeEntry->delete();
 
-        return redirect('/timeentries');
+        return redirect(route('timeentries.index'));
     }
 }
