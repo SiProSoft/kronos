@@ -17,7 +17,7 @@
 <body>
     <div id="app">
 
-        <div>Hey</div>
+        <div>Hey production</div>
         @include('inc.nav')
 
         <div class="container">
