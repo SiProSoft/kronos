@@ -13,9 +13,13 @@
         @if (count($tasks) > 0)
             @foreach ($tasks as $task)
             <div class="panel panel-default">
-                <div class="panel-body">
-                    {{ $task->title }} - {{ $task->project ? $task->project->title : "Error, no project" }}
-
+                <div class="panel-body {{ $task->completed ? "completed" : ""}}">
+                    {{ $task->title }} - 
+                    @if ($task->project->id != auth()->user()->getDefaultProject()->id)
+                        <a href="{{route('projects.show', $task->project->id )}}">{{ $task->project->title }}</a>
+                    @else
+                        {{ $task->project->title }}
+                    @endif
                     <div class="pull-right">
                         <span class="pull-left"><a href="/tasks/{{$task->id}}/edit" class="btn btn-sm btn-default">Edit</a></span>
                         <span class="pull-left">
@@ -24,6 +28,12 @@
                                 {{Form::submit('Delete', ['class' => 'btn btn-sm btn-danger'])}}
                             {!! Form::close() !!}
                         </span>
+
+                        @if ($task->completed)
+                            <span class="pull-left"><a href="{{route('tasks.incomplete', $task->id)}}" class="btn btn-sm btn-warning">Mark as incomplete</a></span>
+                        @else
+                            <span class="pull-left"><a href="{{route('tasks.complete', $task->id)}}" class="btn btn-sm btn-success">Mark as complete</a></span>
+                        @endif
                     </div>
                 </div>
 

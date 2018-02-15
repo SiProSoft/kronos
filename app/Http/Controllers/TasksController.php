@@ -122,9 +122,24 @@ class TasksController extends Controller
         // return redirect(route('tasks.index'))->with('success', 'Task deleted');
     }
 
+    public function complete($id)
+    {
+        // $this->completeTask($id);
 
+        $task = Task::find($id);
+        $task->completed = true;
+        $task->save();
 
+        return redirect(route('tasks.index'));
+    }
 
+    public function incomplete($id) {
+        $task = Task::find($id);
+        $task->completed = false;
+        $task->save();
+
+        return redirect(route('tasks.index'));
+    }
     
     private function validateTask($request) {
         $this->validate($request, [
@@ -141,5 +156,9 @@ class TasksController extends Controller
         $task->user_id = $task->user_id ?? auth()->user()->id;
         $task->save();
     }
+
+    // private function completeTask($id) {
+        
+    // }
 
 }

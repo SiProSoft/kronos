@@ -73,13 +73,15 @@
 
                 <div class="pull-right">
                     
-                    @if ($runningTimeEntry && $runningTimeEntry->task && $runningTimeEntry->task->id == $task->id)
+                    @if ($task->completed)
+                        <span>Marked as complete</span>
+                    @elseif ($runningTimeEntry && $runningTimeEntry->task && $runningTimeEntry->task->id == $task->id)
                         @include('inc.timer.stop', ['runningTimeEntry' => $runningTimeEntry])
                     @else
                         @include('inc.timer.start', ['taskId' => $task->id])
                     @endif
                         
-                    </div>
+                </div>
 
                 {{ $task->title }} - {{ $task->displaySum() }}
                 <div>{{ $task->description }}</div>

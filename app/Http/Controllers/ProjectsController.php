@@ -78,12 +78,17 @@ class ProjectsController extends Controller
      */
     public function show($id)
     {
+
         $user = auth()->user();
 
         $runningTimeEntry = $user->getRunningTimeEntry();
 
         $project = Project::find($id);
 
+        if (!$project) {
+            return redirect(route('projects.index'));
+        }
+        
         $timeEntries = $project->timeEntries()->filter(function($time) {
             return $time->end != null;
         });

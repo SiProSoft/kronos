@@ -28,6 +28,11 @@ Route::post('timer/start', 'TimerController@start')->name('timer.start');
 Route::get('timer/stop', 'TimerController@stop')->name('timer.stop');
 Route::post('timer/{id}/update', 'TimerController@update')->name('timer.stop');
 
+// Tasks
+Route::get('tasks/{id}/complete', 'TasksController@complete')->name('tasks.complete');
+Route::get('tasks/{id}/incomplete', 'TasksController@incomplete')->name('tasks.incomplete');
+
+
 // Resources
 Route::resource('projects', 'ProjectsController');
 Route::resource('tasks', 'TasksController');
