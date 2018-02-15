@@ -17,7 +17,6 @@
 <body>
     <div id="app">
 
-        <div>Hey</div>
         @include('inc.nav')
 
         <div class="container">
