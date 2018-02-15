@@ -66,8 +66,8 @@
         {{ Form::hidden('redirect', '') }}
     {!! Form::close() !!}
 
-    @if (count($project->tasks) > 0)
-        @foreach ($project->tasks as $task)
+    @if (count($tasks) > 0)
+        @foreach ($tasks as $task)
         <div class="panel panel-default">
             <div class="panel-body">
 
