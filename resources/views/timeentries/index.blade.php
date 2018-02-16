@@ -25,6 +25,7 @@
                     <div>
                         {{ $timeEntry->displayTime() }} - {{ $timeEntry->getProject()->title }} - {{ $timeEntry->task->title }}
                     </div>
+                    {{--  <div>{{$timeEntry->start}}</div>  --}}
                     <div>{{$timeEntry->description}}</div>
                 </div>
                 
