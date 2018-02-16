@@ -19,6 +19,16 @@ class ProjectsController extends Controller
         $this->middleware('auth');
     }
     
+
+    public function getProjects() {
+        // $currentProject = TimeEntry::find($id)->task->project;
+        $projects = auth()->user()->projectsWithoutHiddenScope();
+
+        // $result = array();
+        // $result["current"] = $currentProject;
+        // $result["all"] = $projects;
+        return $projects;
+    }
     /**
      * Display a listing of the resource.
      *

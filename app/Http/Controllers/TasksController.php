@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Task;
+use App\Project;
 
 class TasksController extends Controller
 {
@@ -15,6 +16,12 @@ class TasksController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+    }
+
+    public function getTasks($id) {
+        // $tasks = Task::withoutGlobalScopes()->where('project_id', $id)->get();
+        $tasks = Project::withoutGlobalScopes()->find($id)->getTasksWithoutGlobalScopes();
+        return $tasks;
     }
     
     /**

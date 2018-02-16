@@ -13,11 +13,13 @@
         <div class="row form-group" >
             <div class="col-sm-4">
             {{ Form::label('project', 'Project' ) }}
-            {{ Form::select('project', $projects, $timeEntry->getProject()->id, ['class' => 'form-control']) }}
+            {{--  {{ Form::select('project', $projects, $timeEntry->getProject()->id, ['class' => 'form-control', 'v-model' => 'projectid']) }}  --}}
+            <projects-dropdown currentproject="{{$timeEntry->getProject()->id}}"></projects-dropdown>
             </div>
             <div class="col-sm-4">
             {{ Form::label('task', 'Task' ) }}
-            {{ Form::select('task', $tasks, $timeEntry->task->id, ['class' => 'form-control']) }}
+            {{--  {{ Form::select('task', $tasks, $timeEntry->task->id, ['class' => 'form-control']) }}  --}}
+            <tasks-dropdown currentproject="{{$timeEntry->getProject()->id}}" currenttask="{{$timeEntry->task->id}}"></tasks-dropdown>
             </div>
         </div>
 
