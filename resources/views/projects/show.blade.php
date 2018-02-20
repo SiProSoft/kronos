@@ -70,7 +70,7 @@
         @foreach ($tasks as $task)
         <div class="panel panel-default">
             <div class="panel-body">
-
+{{--  
                 <div class="pull-right">
                     
                     @if ($task->completed)
@@ -81,10 +81,15 @@
                         @include('inc.timer.start', ['taskId' => $task->id])
                     @endif
                         
+                </div>  --}}
+
+                <div class="pull-right">
+                    @include('inc.tasks.more-button')
                 </div>
 
                 {{ $task->title }} - {{ $task->displaySum() }}
                 <div>{{ $task->description }}</div>
+
 
             </div>
         </div>

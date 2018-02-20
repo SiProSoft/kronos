@@ -32,6 +32,8 @@ Route::post('timer/{id}/update', 'TimerController@update')->name('timer.stop');
 Route::get('tasks/{id}/complete', 'TasksController@complete')->name('tasks.complete');
 Route::get('tasks/{id}/incomplete', 'TasksController@incomplete')->name('tasks.incomplete');
 
+Route::get('/api/tasks/p/{id}', 'TasksController@getTasks')->name('tasks.get');
+Route::get('/api/projects', 'ProjectsController@getProjects')->name('projects.get');
 
 // Resources
 Route::resource('projects', 'ProjectsController');

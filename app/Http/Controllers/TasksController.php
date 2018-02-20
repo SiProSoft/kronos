@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Task;
+use App\Project;
 
 class TasksController extends Controller
 {
@@ -16,6 +17,12 @@ class TasksController extends Controller
     {
         $this->middleware('auth');
     }
+
+    public function getTasks($id) {
+        // $tasks = Task::withoutGlobalScopes()->where('project_id', $id)->get();
+        $tasks = Project::withoutGlobalScopes()->find($id)->getTasksWithoutGlobalScopes();
+        return $tasks;
+    }
     
     /**
      * Display a listing of the resource.
@@ -24,9 +31,13 @@ class TasksController extends Controller
      */
     public function index()
     {
-        $tasks = auth()->user()->tasks;
+        $user = auth()->user();
+
+        // $tasks = auth()->user()->tasks->sortBy('completed')->thenByDesc('created_at');
         $projects = auth()->user()->projects->pluck('title', 'id');
         
+        $tasks = $user->tasks->sortBy('completed')->groupBy('completed');
+        // return $tasks;
         return view('tasks.index')->with(['tasks' => $tasks, 'projects' => $projects]);
     }
 

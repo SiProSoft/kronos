@@ -27,7 +27,7 @@ class TimeEntriesController extends Controller
     {
         $user = auth()->user();
 
-        $timeEntries = $user->getTimeEntries();
+        $timeEntries = $user->getTimeEntries()->sortByDesc('start');
 
         return view('timeentries.index')->with('timeEntries', $timeEntries);
     }

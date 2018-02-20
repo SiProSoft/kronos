@@ -1,7 +1,7 @@
 @auth
 
 {{--  TODO: Remove style attribute  --}}
-<div class="nav--timer pull-right" style="margin: 7px 0;">
+<div class="nav--timer pull-right" style="margin: 5px 0;">
     @if ($runningTimeEntry)
         @include('inc.timer.stop')
     @else

@@ -17,7 +17,7 @@ class Task extends Model
     ];
 
     public function project() {
-        return $this->belongsTo('App\Project')->withoutGlobalScopes();;
+        return $this->belongsTo('App\Project')->withoutGlobalScopes();
     }
 
     public function timeEntries() {
@@ -28,6 +28,12 @@ class Task extends Model
         return $this->belongsTo('App\User');
     }
 
+    public function isInProgress() {
+        $runningTimeEntry = auth()->user()->getRunningTimeEntry();
+        $isRunning = $runningTimeEntry ? $this->id == $runningTimeEntry->task->id : false;
+        return $isRunning;
+    }
+    
     public function displaySum() {
         $time = 0;
         

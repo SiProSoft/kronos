@@ -12,19 +12,38 @@
                 <div class="panel-body">
 
                     {{--  Edit/Delete buttons  --}}
-                    <div class="pull-right">
-                        <span class="pull-left"><a href="/timeentries/{{$timeEntry->id}}/edit" class="btn btn-sm btn-default">Edit</a></span>
-                        <span class="pull-left">
-                            {!! Form::open(['action' => ['TimeEntriesController@destroy', $timeEntry->id], 'method' => 'POST']) !!}
-                                {{Form::hidden('_method', 'DELETE')}}
-                                {{Form::submit('Delete', ['class' => 'btn btn-sm btn-danger'])}}
-                            {!! Form::close() !!}
-                        </span>
+                    <div class="pull-right option-menu">
+
+                        <div class="more-group">
+
+                            <a href="#" class="more-group--button ic-more">
+                                <img src="{{ asset('img/icon/ic-more.svg') }}" alt="More icon">
+                            </a>
+
+                            <div class="more-group--list">
+
+                                <div class="">
+                                    <a href="/timeentries/{{$timeEntry->id}}/edit" class="btn btn-sm btn-default">
+                                        Edit
+                                    </a>
+                                </div>
+                                
+                                <div class="">
+                                    {!! Form::open(['action' => ['TimeEntriesController@destroy', $timeEntry->id], 'method' => 'POST']) !!}
+                                        {{Form::hidden('_method', 'DELETE')}}
+                                        {{Form::submit('Delete', ['class' => 'btn btn-sm btn-danger'])}}
+                                    {!! Form::close() !!}
+                                </div>
+                            </div>
+                            
+                        </div>
+                        
                     </div>
                           
                     <div>
                         {{ $timeEntry->displayTime() }} - {{ $timeEntry->getProject()->title }} - {{ $timeEntry->task->title }}
                     </div>
+                    {{--  <div>{{$timeEntry->start}}</div>  --}}
                     <div>{{$timeEntry->description}}</div>
                 </div>
                 

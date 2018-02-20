@@ -15,8 +15,26 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
+Vue.component('projects-dropdown', require('./components/ProjectsDropdown.vue'));
+Vue.component('tasks-dropdown', require('./components/TasksDropdown.vue'));
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+});
+
+$('.more-group--button').on('click', function() {
+    $(this).siblings('.more-group--list').show();
+    return false;
+});
+
+
+$(document).mouseup(function(e) 
+{
+    var container = $(".more-group--list");
+
+    // if the target of the click isn't the container nor a descendant of the container
+    if (!container.is(e.target) && container.has(e.target).length === 0) 
+    {
+        container.hide();
+    }
 });
