@@ -21,3 +21,20 @@ Vue.component('tasks-dropdown', require('./components/TasksDropdown.vue'));
 const app = new Vue({
     el: '#app',
 });
+
+$('.more-group--button').on('click', function() {
+    $(this).siblings('.more-group--list').show();
+    return false;
+});
+
+
+$(document).mouseup(function(e) 
+{
+    var container = $(".more-group--list");
+
+    // if the target of the click isn't the container nor a descendant of the container
+    if (!container.is(e.target) && container.has(e.target).length === 0) 
+    {
+        container.hide();
+    }
+});

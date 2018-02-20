@@ -31,9 +31,13 @@ class TasksController extends Controller
      */
     public function index()
     {
-        $tasks = auth()->user()->tasks;
+        $user = auth()->user();
+
+        // $tasks = auth()->user()->tasks->sortBy('completed')->thenByDesc('created_at');
         $projects = auth()->user()->projects->pluck('title', 'id');
         
+        $tasks = $user->tasks->sortBy('completed')->groupBy('completed');
+        // return $tasks;
         return view('tasks.index')->with(['tasks' => $tasks, 'projects' => $projects]);
     }
 
