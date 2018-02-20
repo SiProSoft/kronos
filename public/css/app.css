@@ -8382,3 +8382,12 @@ button.close {
   display: inline-block;
 }
 
+.nav--timer__details {
+  font-size: 14px;
+  line-height: 1.4;
+  color: #fff;
+  padding-right: 10px;
+  text-align: right;
+  margin: 2px 0;
+}
+
