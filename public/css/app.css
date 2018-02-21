@@ -8350,6 +8350,17 @@ button.close {
   }
 }
 
+.relative {
+  position: relative;
+}
+
+.task-progress {
+  height: 2px;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
 .more-group {
   position: relative;
 }
@@ -8364,6 +8375,7 @@ button.close {
   padding: 10px;
   width: auto;
   white-space: nowrap;
+  z-index: 10;
 }
 
 .more-group--list .btn {

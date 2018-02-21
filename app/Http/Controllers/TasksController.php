@@ -115,7 +115,15 @@ class TasksController extends Controller
             return redirect($request->input('redirect'));
         }
         
+        // return redirect(url()->previous());
+        // return redirect(route('tasks.index'));
+        
+        if ($request->input('redirect')) {
+            return redirect($request->input('redirect'));
+        }
+
         return redirect(route('tasks.index'));
+        
     }
     
     /**
@@ -129,7 +137,7 @@ class TasksController extends Controller
         $task = Task::find($id);
         $task->delete();
 
-        return redirect(url()->previous());
+        return redirect(url()->previous())->with('success', 'Task deleted');
         // return redirect(route('tasks.index'))->with('success', 'Task deleted');
     }
 
@@ -160,11 +168,19 @@ class TasksController extends Controller
     }
 
     private function updateTask($task, $request) {
+
+        // $estimate = $request->input('estimate');
+        
+        $estimate = $request->input('estimate') * 60 * 60;
+        
+        //------
+
         $task->title = $request->input('title');
         $task->description = $request->input('description');
         $task->project_id = $request->input('project');
         $task->completed = $task->completed ?? false;
         $task->user_id = $task->user_id ?? auth()->user()->id;
+        $task->estimate = $estimate;
         $task->save();
     }
 

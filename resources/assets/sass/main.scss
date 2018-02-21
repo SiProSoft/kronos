@@ -3,3 +3,14 @@
 //     border: none;
 //     padding: 0;
 // }
+
+.relative {
+    position: relative;
+}
+
+.task-progress {
+    height: 2px;
+    position: absolute;
+    left: 0;
+    top: 0;
+}

@@ -33,8 +33,49 @@ class Task extends Model
         $isRunning = $runningTimeEntry ? $this->id == $runningTimeEntry->task->id : false;
         return $isRunning;
     }
+
+    public function getProgressInPercent() {
+        $time = $this->getTotalTimeSpent();
+
+        if ($this->estimate) {
+            
+            $percent = $time / $this->estimate * 100;
+            return $percent > 100 ? 100 : $percent;
+        }
+        
+        return 0;
+    }
+
+    public function getProgressInColor() {
+        $percent = $this->getProgressInPercent();
+        $color = '';
+
+        
+        if ($percent == 0) {
+            $color = '#cac8c8';
+        }
+
+        else if ($percent < 25) {
+            $color = '#06D6A0';
+        }
+
+        else if ($percent < 50) {
+            $color = '#b1ef3a';
+        }
+
+        else if ($percent < 75) {
+            $color = '#e3e664';
+        }
+
+        else {
+            $color = '#EF476F';
+
+        }
+
+        return $color;
+    }
     
-    public function displaySum() {
+    public function getTotalTimeSpent() {
         $time = 0;
         
         foreach ($this->timeEntries as $te) {
@@ -42,6 +83,17 @@ class Task extends Model
                 $time += $te->getTime();
             }
         } 
+        return $time;
+    }
+    
+    public function displaySum() {
+        $time = $this->getTotalTimeSpent();
+        
+        // foreach ($this->timeEntries as $te) {
+        //     if ($te->end) {
+        //         $time += $te->getTime();
+        //     }
+        // } 
         
         $sum = sprintf('%02d:%02d:%02d', ($time/3600),($time/60%60), $time%60);
 

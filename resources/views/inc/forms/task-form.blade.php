@@ -13,6 +13,12 @@ $action = $task ? ['TasksController@update', $task->id] : 'TasksController@store
 </div>
 
 <div class="form-group">
+    {{ Form::label('estimate', 'Estimate (Default is hours)') }}
+    {{--  <p class="small">Append "h", "m" and "s" to define Hours, Minutes and Seconds</p>  --}}
+    {{ Form::text('estimate', $task ? ($task->estimate / 60 / 60) : null, ['class' => 'form-control'] ) }}
+</div>
+
+<div class="form-group">
     {{ Form::label('project', 'Project' ) }}
     {{ Form::select('project', auth()->user()->projectsWithoutHiddenScope()->pluck('title', 'id'), $task && $task->project ? $task->project->id : null, ['class' => 'form-control']) }}
 </div>

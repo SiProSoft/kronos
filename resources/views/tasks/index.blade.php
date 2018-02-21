@@ -15,8 +15,8 @@
 
                 <p>{{ $tasklist[0]->completed ? "Completed tasks" : ""}}</p>
                 @foreach ($tasklist as $task)
-                <div class="panel panel-default">
-                    <div class="panel-body {{ $task->completed ? "completed" : ""}}">
+                <div class="panel panel-default relative">
+                    <div class="panel-body {{ $task->completed ? "completed" : ""}} ">
                         {{ $task->title }} - 
                         @if ($task->project->id != auth()->user()->getDefaultProject()->id)
                             <a href="{{route('projects.show', $task->project->id )}}">{{ $task->project->title }}</a>
@@ -30,6 +30,15 @@
                             
                             
                         </div>
+
+                        @php
+                        $isEstimated = $task->estimate > 0;
+                        $color = $task->getProgressInColor();
+
+                        $percent = $isEstimated && $task->getProgressInPercent() == 0 ? 100 : $task->getProgressInPercent();
+                        
+                        @endphp
+                        <div class="task-progress" style="width: {{ $percent }}%; background: {{$color}};"></div>
                     </div>
 
                     
