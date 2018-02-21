@@ -1,6 +1,11 @@
 .more-group {
     position: relative;
     
+    &--project-wrapper .more-group {
+        margin: 27px 15px;
+    }
+
+    
     &--list {
         display: none;
         position: absolute;

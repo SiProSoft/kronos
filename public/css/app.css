@@ -8365,6 +8365,10 @@ button.close {
   position: relative;
 }
 
+.more-group--project-wrapper .more-group {
+  margin: 27px 15px;
+}
+
 .more-group--list {
   display: none;
   position: absolute;
