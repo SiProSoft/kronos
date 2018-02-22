@@ -15,9 +15,6 @@
     </div>
     <hr>
     
-    
-    
-    
     <h4>Tasks</h4>
     <br>
     {!! Form::open(['action' => 'TasksController@store', 'method' => 'POST']) !!}
@@ -39,30 +36,13 @@
             </div>
         </div>
 
-        {{--  {{ Form::hidden('redirect', '') }}  --}}
         {{ Form::hidden('redirect', url()->current()) }}
     {!! Form::close() !!}
 
     <hr>
+    
     @if (count($tasks) > 0)
         @include('inc.tasks.list', ['tasks' => $tasks, 'viewMode' => 'project'])
-        
-        @foreach ($tasks as $task)
-        
-        {{--  <div class="panel panel-default">
-            <div class="panel-body">
-
-                <div class="pull-right">
-                    @include('inc.tasks.more-button')
-                </div>
-
-                {{ $task->title }} - {{ $task->displaySum() }}
-                <div>{{ $task->description }}</div>
-
-
-            </div>
-        </div>  --}}
-        @endforeach
     @else
         <div>No tasks on this project</div>
     @endif
