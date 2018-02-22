@@ -28,6 +28,10 @@ class Task extends Model
         return $this->belongsTo('App\User');
     }
 
+    public function completed() {
+        return $this->completed_at != null;
+    }
+
     public function isInProgress() {
         $runningTimeEntry = auth()->user()->getRunningTimeEntry();
         $isRunning = $runningTimeEntry ? $this->id == $runningTimeEntry->task->id : false;

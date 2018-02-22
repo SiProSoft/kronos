@@ -8369,6 +8369,11 @@ body {
   top: 0;
 }
 
+.completed-task-list .panel-default,
+.completed-task-list .more-group--button {
+  color: #a9a3a3;
+}
+
 .floating-timer-button {
   position: fixed;
   bottom: 50px;
@@ -8453,10 +8458,15 @@ body {
 
 .more-group {
   position: relative;
+  height: 25px;
 }
 
 .more-group--project-wrapper .more-group {
   margin: 27px 15px;
+}
+
+.more-group--button {
+  color: #333;
 }
 
 .more-group--list {

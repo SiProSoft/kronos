@@ -1,6 +1,7 @@
 <div class="more-group">
     <a href="#" class="more-group--button ic-more">
-        <img src="{{ asset('img/icon/ic-more.svg') }}" alt="More icon">
+        {{--  <img src="{{ asset('img/icon/ic-more.svg') }}" alt="More icon">  --}}
+        <i class="material-icons">more_vert</i>
     </a>
 
     <div class="more-group--list">

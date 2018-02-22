@@ -1,7 +1,8 @@
 <div class="more-group">
 
         <a href="#" class="more-group--button ic-more">
-            <img src="{{ asset('img/icon/ic-more.svg') }}" alt="More icon">
+            {{--  <img src="{{ asset('img/icon/ic-more.svg') }}" alt="More icon">  --}}
+            <i class="material-icons">more_vert</i>
         </a>
 
         <div class="more-group--list">
@@ -18,7 +19,7 @@
             
             {{--  Complete Task Button  --}}
             <div class="">
-                @if ($task->completed)
+                @if ($task->completed())
                     <a href="{{route('tasks.incomplete', $task->id)}}" class="">Mark as incomplete</a>
                 @else
                     <a href="{{route('tasks.complete', $task->id)}}" class="">Mark as complete</a>

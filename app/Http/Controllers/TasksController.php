@@ -37,14 +37,14 @@ class TasksController extends Controller
         $projects = auth()->user()->projects->pluck('title', 'id');
         
         $tasks["completed"] = $user->tasks->filter(function($t) {
-            return $t->completed;
+            return $t->completed_at != null;
         });
 
         $tasks["incompleted"] = $user->tasks->filter(function($t) {
-            return !$t->completed;
+            return $t->completed_at == null;
         });
 
-        $tasks["completed"] = $tasks["completed"]->sortByDesc('created_at');
+        $tasks["completed"] = $tasks["completed"]->sortByDesc('completed_at');
         $tasks["incompleted"] = $tasks["incompleted"]->sortByDesc('created_at');
 
         // return $tasks;
@@ -156,7 +156,7 @@ class TasksController extends Controller
         // $this->completeTask($id);
 
         $task = Task::find($id);
-        $task->completed = true;
+        $task->completed_at = NOW();
         $task->save();
 
         return redirect(route('tasks.index'));
@@ -164,7 +164,7 @@ class TasksController extends Controller
 
     public function incomplete($id) {
         $task = Task::find($id);
-        $task->completed = false;
+        $task->completed_at = null;
         $task->save();
 
         return redirect(route('tasks.index'));
@@ -188,9 +188,10 @@ class TasksController extends Controller
         $task->title = $request->input('title');
         $task->description = $request->input('description');
         $task->project_id = $request->input('project');
-        $task->completed = $task->completed ?? false;
+        // $task->completed = $task->completed ?? false;
         $task->user_id = $task->user_id ?? auth()->user()->id;
         $task->estimate = $estimate;
+        
         $task->save();
     }
 

@@ -1,6 +1,6 @@
 @foreach ($tasks as $task)
     <div class="panel panel-default relative">
-        <div class="panel-body {{ $task->completed ? "completed" : ""}} ">
+        <div class="panel-body {{ $task->completed() ? "completed" : ""}} ">
             {{ $task->title }} - 
             @if ($task->project->id != auth()->user()->getDefaultProject()->id)
                 <a href="{{route('projects.show', $task->project->id )}}">{{ $task->project->title }}</a>
