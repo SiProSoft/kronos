@@ -34,7 +34,7 @@
 
             {{ Form::hidden('project', $project->id) }}
             <div class="col-sm-4 form-group">
-                <div><label for="">&nbsp;</label></div>
+                <div class="hidden-xs"><label for="">&nbsp;</label></div>
                 {{ Form::submit('Create task', ['class' => 'btn btn-primary']) }}
             </div>
         </div>
@@ -42,6 +42,7 @@
         {{ Form::hidden('redirect', '') }}
     {!! Form::close() !!}
 
+    <hr>
     @if (count($tasks) > 0)
         @foreach ($tasks as $task)
         <div class="panel panel-default">

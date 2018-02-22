@@ -3,13 +3,9 @@
 @section('content')
 <div class="container">
 
-    <h4>Projects</h4>
-    <br>
-
-    @include('inc.forms.project-form', ['project' => null])
-    
+    <h4 class="inline-block">Projects</h4>
+    <a href="{{route('projects.create')}}" class="small">(Create project)</a>
     <hr>
-
     <div class="row">
 
         @foreach ($projects as $project)

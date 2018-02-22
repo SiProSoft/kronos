@@ -1,14 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+    <div class="container">
 
-        <h4>Tasks</h4>
-        <br>
-
-        @include('inc.forms.task-form', ['task' => null])
-
-        <hr>
+            <h4 class="inline-block">Tasks</h4>
+            <a href="{{route('tasks.create')}}" class="small">(Create task)</a>
+            <hr>
 
         @if (count($tasks) > 0)
             @foreach ($tasks as $tasklist)
@@ -49,7 +46,5 @@
         @else
             <div>No tasks on this project</div>
         @endif
-    
-    
-</div>
+    </div>
 @endsection
