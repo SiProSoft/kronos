@@ -26,7 +26,7 @@ Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
 Route::get('timer/start', 'TimerController@start')->name('timer.start');
 Route::post('timer/start', 'TimerController@start')->name('timer.start');
 Route::get('timer/stop', 'TimerController@stop')->name('timer.stop');
-Route::post('timer/{id}/update', 'TimerController@update')->name('timer.stop');
+Route::post('timer/{id}/update', 'TimerController@update')->name('timer.update');
 
 // Tasks
 Route::get('tasks/{id}/complete', 'TasksController@complete')->name('tasks.complete');

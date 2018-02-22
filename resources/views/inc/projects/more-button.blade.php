@@ -27,6 +27,7 @@
                 @endif  --}}
             @else
                 @include('inc.timer.start', ['taskId' => $project->getDefaultTask()->id, 'labelText' => 'Start project'])
+                {{--  {{$project->getDefaultTask()->id}}  --}}
             @endif
         </div>
     </div>

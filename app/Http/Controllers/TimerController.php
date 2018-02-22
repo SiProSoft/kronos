@@ -25,20 +25,22 @@ class TimerController extends Controller
 
         $timeEntry = new TimeEntry;
  
-        // $project = Project::find($request->input('task'));
-        // if (!$project) {
-        //     $project = auth()->user()->getDefaultProject();
-        // }
-        
-        // $task = Task::find($request->input('task'));
+        $project = Project::withoutGlobalScopes()->find($request->input('task'));
+        if (!$project) {
+            $project = auth()->user()->getDefaultProject();
+        }
 
-        // if (!$task) {
-        //     $task = $project->getDefaultTask();
-        // }
+        
+        $task = Task::withoutGlobalScopes()->find($request->input('task'));
+
+        if (!$task) {
+            $task = $project->getDefaultTask();
+        }
+        // return $task;
 
         $timeEntry->start = NOW();
         $timeEntry->user_id = auth()->user()->id;
-        $timeEntry->task_id = $request->input('task');
+        $timeEntry->task_id = $task->id;
         $timeEntry->description = $request->input('description');
         $timeEntry->save();
 

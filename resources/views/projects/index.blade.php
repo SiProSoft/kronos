@@ -16,6 +16,11 @@
         <div class="col-md-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
+
+                    <div class="pull-right">
+                        @include('inc.projects.more-button')
+                    </div>
+                    
                     <a href="{{route('projects.show', $project->id)}}">
                         {{$project->title}}
                     </a>
