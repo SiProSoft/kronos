@@ -108,7 +108,7 @@ class ProjectsController extends Controller
         $sumFormatted = showAsTime($sumInSeconds);
 
         $tasks = $project->tasks->sort(function($t) {
-            return $t->completed;
+            return $t->completed();
         });
 
         return view('projects.show')->with([
