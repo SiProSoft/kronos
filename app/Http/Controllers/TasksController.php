@@ -36,7 +36,17 @@ class TasksController extends Controller
         // $tasks = auth()->user()->tasks->sortBy('completed')->thenByDesc('created_at');
         $projects = auth()->user()->projects->pluck('title', 'id');
         
-        $tasks = $user->tasks->sortBy('completed')->groupBy('completed');
+        $tasks["completed"] = $user->tasks->filter(function($t) {
+            return $t->completed;
+        });
+
+        $tasks["incompleted"] = $user->tasks->filter(function($t) {
+            return !$t->completed;
+        });
+
+        $tasks["completed"] = $tasks["completed"]->sortByDesc('created_at');
+        $tasks["incompleted"] = $tasks["incompleted"]->sortByDesc('created_at');
+
         // return $tasks;
         return view('tasks.index')->with(['tasks' => $tasks, 'projects' => $projects]);
     }
@@ -66,10 +76,10 @@ class TasksController extends Controller
         $this->updateTask($task, $request);
 
         if ($request->input('redirect')) {
-            return redirect($request->input('redirect'));
+            return redirect($request->input('redirect'))->with('success', 'Task has been created');
         }
 
-        return redirect(url()->previous());
+        return redirect(route('tasks.index'))->with('success', 'Task has been created');
     }
     
 
