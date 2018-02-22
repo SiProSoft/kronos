@@ -39,26 +39,18 @@
             </div>
         </div>
 
-        {{ Form::hidden('redirect', '') }}
+        {{--  {{ Form::hidden('redirect', '') }}  --}}
+        {{ Form::hidden('redirect', url()->current()) }}
     {!! Form::close() !!}
 
     <hr>
     @if (count($tasks) > 0)
+        @include('inc.tasks.list', ['tasks' => $tasks, 'viewMode' => 'project'])
+        
         @foreach ($tasks as $task)
-        <div class="panel panel-default">
+        
+        {{--  <div class="panel panel-default">
             <div class="panel-body">
-{{--  
-                <div class="pull-right">
-                    
-                    @if ($task->completed)
-                        <span>Marked as complete</span>
-                    @elseif ($runningTimeEntry && $runningTimeEntry->task && $runningTimeEntry->task->id == $task->id)
-                        @include('inc.timer.stop', ['runningTimeEntry' => $runningTimeEntry])
-                    @else
-                        @include('inc.timer.start', ['taskId' => $task->id])
-                    @endif
-                        
-                </div>  --}}
 
                 <div class="pull-right">
                     @include('inc.tasks.more-button')
@@ -69,11 +61,13 @@
 
 
             </div>
-        </div>
+        </div>  --}}
         @endforeach
     @else
         <div>No tasks on this project</div>
     @endif
+    <br>
+    <a href="{{route('tasks.index')}}">Show completed tasks</a>
 
 
 

@@ -9,7 +9,8 @@
 
         @if (count($tasks['incompleted']) || count($tasks['completed']))
             @if (count($tasks['incompleted']))
-                @include('inc.tasks.list',  ['tasks' => $tasks['incompleted']])
+                {{--  @include('inc.tasks.list', ['tasks' => $tasks, 'viewMode' => 'project'])  --}}
+                @include('inc.tasks.list', ['tasks' => $tasks['incompleted'], 'viewMode' => 'tasks'])
             @else
                 <p>All tasks are completed. Well done!</p>
             @endif
@@ -20,7 +21,8 @@
                 <h4>Completed tasks</h4>
                 <br>
                 <div class="completed-task-list">
-                    @include('inc.tasks.list',  ['tasks' => $tasks['completed']])
+                    @include('inc.tasks.list', ['tasks' => $tasks['completed'], 'viewMode' => 'tasks'])
+                {{--  @include('inc.tasks.list', ['tasks' => $tasks['completed']])  --}}
                 </div>
             @endif
         @else
