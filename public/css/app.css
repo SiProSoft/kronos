@@ -8468,16 +8468,28 @@ body {
   z-index: 10;
 }
 
-.more-group--list .btn {
+.more-group--list .btn,
+.more-group--list .btn:active,
+.more-group--list .btn:focus,
+.more-group--list .btn:hover {
   background: none;
   border: none;
   padding: 0;
   color: #333;
 }
 
+.more-group--list .btn-danger,
+.more-group--list .btn-danger:hover {
+  color: #EF476F;
+}
+
 .more-group--list a {
-  color: inherit;
+  color: #333;
   text-decoration: none;
+}
+
+.more-group--list hr {
+  margin: 5px 0;
 }
 
 .more-group--list.open {
