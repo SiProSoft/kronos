@@ -1,5 +1,16 @@
+// @import
+
 .more-group {
     position: relative;
+    height: 25px;
+
+    &--project-wrapper .more-group {
+        margin: 27px 15px;
+    }
+
+    &--button {
+        color: #333;
+    }
     
     &--list {
         display: none;
@@ -11,17 +22,26 @@
         padding: 10px;
         width: auto;
         white-space: nowrap;
+        z-index: 10;
 
-        .btn {
+        .btn, .btn:active, .btn:focus, .btn:hover {
             background: none;
             border: none;
             padding: 0;
             color: #333;
         }
 
+        .btn-danger, .btn-danger:hover {
+            color: $color-red;
+        }
+
         a {
-            color: inherit;
+            color: #333;
             text-decoration: none;
+        }
+
+        hr {
+            margin: 5px 0;
         }
 
         &.open {

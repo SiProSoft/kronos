@@ -36,7 +36,17 @@ class TasksController extends Controller
         // $tasks = auth()->user()->tasks->sortBy('completed')->thenByDesc('created_at');
         $projects = auth()->user()->projects->pluck('title', 'id');
         
-        $tasks = $user->tasks->sortBy('completed')->groupBy('completed');
+        $tasks["completed"] = $user->tasks->filter(function($t) {
+            return $t->completed_at != null;
+        });
+
+        $tasks["incompleted"] = $user->tasks->filter(function($t) {
+            return $t->completed_at == null;
+        });
+
+        $tasks["completed"] = $tasks["completed"]->sortByDesc('completed_at');
+        $tasks["incompleted"] = $tasks["incompleted"]->sortByDesc('created_at');
+
         // return $tasks;
         return view('tasks.index')->with(['tasks' => $tasks, 'projects' => $projects]);
     }
@@ -66,10 +76,10 @@ class TasksController extends Controller
         $this->updateTask($task, $request);
 
         if ($request->input('redirect')) {
-            return redirect($request->input('redirect'));
+            return redirect($request->input('redirect'))->with('success', 'Task has been created');
         }
 
-        return redirect(url()->previous());
+        return redirect(route('tasks.index'))->with('success', 'Task has been created');
     }
     
 
@@ -115,7 +125,15 @@ class TasksController extends Controller
             return redirect($request->input('redirect'));
         }
         
+        // return redirect(url()->previous());
+        // return redirect(route('tasks.index'));
+        
+        if ($request->input('redirect')) {
+            return redirect($request->input('redirect'));
+        }
+
         return redirect(route('tasks.index'));
+        
     }
     
     /**
@@ -129,7 +147,7 @@ class TasksController extends Controller
         $task = Task::find($id);
         $task->delete();
 
-        return redirect(url()->previous());
+        return redirect(url()->previous())->with('success', 'Task deleted');
         // return redirect(route('tasks.index'))->with('success', 'Task deleted');
     }
 
@@ -138,7 +156,7 @@ class TasksController extends Controller
         // $this->completeTask($id);
 
         $task = Task::find($id);
-        $task->completed = true;
+        $task->completed_at = NOW();
         $task->save();
 
         return redirect(route('tasks.index'));
@@ -146,7 +164,7 @@ class TasksController extends Controller
 
     public function incomplete($id) {
         $task = Task::find($id);
-        $task->completed = false;
+        $task->completed_at = null;
         $task->save();
 
         return redirect(route('tasks.index'));
@@ -160,11 +178,20 @@ class TasksController extends Controller
     }
 
     private function updateTask($task, $request) {
+
+        // $estimate = $request->input('estimate');
+        
+        $estimate = $request->input('estimate') * 60 * 60;
+        
+        //------
+
         $task->title = $request->input('title');
         $task->description = $request->input('description');
         $task->project_id = $request->input('project');
-        $task->completed = $task->completed ?? false;
+        // $task->completed = $task->completed ?? false;
         $task->user_id = $task->user_id ?? auth()->user()->id;
+        $task->estimate = $estimate;
+        
         $task->save();
     }
 

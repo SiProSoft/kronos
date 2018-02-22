@@ -1,34 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    
-    <div class="pull-right">
-        <a href="{{route('projects.edit', $project->id)}}" class="btn btn-default pull-left">Edit</a>
-
-        {!! Form::open(['action' => ['ProjectsController@destroy', $project->id], 'method' => 'POST', 'class' => 'pull-right']) !!}
-            <div class="form-group">
-                {{ Form::submit('Delete', ['class' => 'btn btn-danger']) }}
-            </div>
-        
-            {{ Form::hidden('_method', 'DELETE') }}
-        {!! Form::close() !!}
+<div class="container projects--show">
+    <div class="more-group--project-wrapper pull-right">
+        @include('inc.projects.more-button')
     </div>
-
-    @if ($runningTimeEntry)
-        @if ($runningTimeEntry->getProject()->id == $project->id)
-            @include('inc.timer.stop', ['runningTimeEntry' => $runningTimeEntry])
-        {{--  <a href="/timer/{{ $runningTimeEntry->id }}/stop" class="btn btn-danger">Stop timer</a>  --}}
-        @else
-            <div>Timer is running for another project</div>
-            @include('inc.timer.start', ['taskId' => $project->getDefaultTask()->id])
-        @endif
-        
-    @else
-        @include('inc.timer.start', ['taskId' => $project->getDefaultTask()->id])
-    @endif
-
-    {{--  <a href="#">Start timer</a>  --}}
     
     <h3>
         {{ $project->title }}
@@ -58,7 +34,7 @@
 
             {{ Form::hidden('project', $project->id) }}
             <div class="col-sm-4 form-group">
-                <div><label for="">&nbsp;</label></div>
+                <div class="hidden-xs"><label for="">&nbsp;</label></div>
                 {{ Form::submit('Create task', ['class' => 'btn btn-primary']) }}
             </div>
         </div>
@@ -66,6 +42,7 @@
         {{ Form::hidden('redirect', '') }}
     {!! Form::close() !!}
 
+    <hr>
     @if (count($tasks) > 0)
         @foreach ($tasks as $task)
         <div class="panel panel-default">

@@ -1,46 +1,30 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+    <div class="container">
 
-        <h4>Tasks</h4>
-        <br>
-
-        @include('inc.forms.task-form', ['task' => null])
-
+        <h4 class="inline-block">Tasks</h4>
+        <a href="{{route('tasks.create')}}" class="small">(Create task)</a>
         <hr>
 
-        @if (count($tasks) > 0)
-            @foreach ($tasks as $tasklist)
+        @if (count($tasks['incompleted']) || count($tasks['completed']))
+            @if (count($tasks['incompleted']))
+                @include('inc.tasks.list',  ['tasks' => $tasks['incompleted']])
+            @else
+                <p>All tasks are completed. Well done!</p>
+            @endif
+            
+            <br>
 
-                <p>{{ $tasklist[0]->completed ? "Completed tasks" : ""}}</p>
-                @foreach ($tasklist as $task)
-                <div class="panel panel-default">
-                    <div class="panel-body {{ $task->completed ? "completed" : ""}}">
-                        {{ $task->title }} - 
-                        @if ($task->project->id != auth()->user()->getDefaultProject()->id)
-                            <a href="{{route('projects.show', $task->project->id )}}">{{ $task->project->title }}</a>
-                        @else
-                            {{ $task->project->title }}
-                        @endif
-                        <div class="pull-right option-menu">
-
-                            @include('inc.tasks.more-button', ['task' => $task])
-                            
-                            
-                            
-                        </div>
-                    </div>
-
-                    
+            @if (count($tasks['completed']))
+                <h4>Completed tasks</h4>
+                <br>
+                <div class="completed-task-list">
+                    @include('inc.tasks.list',  ['tasks' => $tasks['completed']])
                 </div>
-                    {{--  <div>Id: {{ $entry->id }}, {{ $entry->displayTime() }}</div>      --}}
-                @endforeach
-            @endforeach
+            @endif
         @else
-            <div>No tasks on this project</div>
+            <div>No tasks</div>
         @endif
-    
-    
-</div>
+    </div>
 @endsection

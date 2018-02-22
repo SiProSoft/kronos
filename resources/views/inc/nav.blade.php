@@ -11,13 +11,13 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-
+{{--  
             <div class="visible-xs">
                 @include('inc.nav--timer')
-            </div>
+            </div>  --}}
 
             <!-- Branding Image -->
-            <a class="navbar-brand" href="{{ url('/') }}">
+            <a class="navbar-brand" href="{{ route('dashboard') }}">
                 {{ config('app.name', 'Laravel') }}
             </a>
             
@@ -63,10 +63,10 @@
                     </li>
                 @endguest
             </ul>
-
+{{--  
             <div class="hidden-xs">
                 @include('inc.nav--timer')
-            </div>
+            </div>  --}}
             
         </div>
 
