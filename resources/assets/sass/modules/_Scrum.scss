@@ -8,7 +8,7 @@ $scrum--space-between-items: 6px;
     }
 
     &--board {
-        width: 640px;
+        width: 880px;
         overflow: auto;
     }
 
@@ -18,7 +18,7 @@ $scrum--space-between-items: 6px;
     }
 
     &--list {
-        width: 140px;
+        width: 200px;
         background: #e0dada;
         padding: 0 $scrum--space-between-items;
         overflow: hidden;
@@ -36,7 +36,7 @@ $scrum--space-between-items: 6px;
         color: #333;
         margin: $scrum--space-between-items 0;
         border-radius: 3px;
-        box-shadow: 0 2px 8px #cecdcd;
+        box-shadow: 0 2px 3px #c7c7c7;
         list-style: none;
         cursor: -webkit-grab;
 

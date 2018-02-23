@@ -8524,7 +8524,7 @@ body {
 }
 
 .scrum--board {
-  width: 640px;
+  width: 880px;
   overflow: auto;
 }
 
@@ -8534,7 +8534,7 @@ body {
 }
 
 .scrum--list {
-  width: 140px;
+  width: 200px;
   background: #e0dada;
   padding: 0 6px;
   overflow: hidden;
@@ -8552,8 +8552,8 @@ body {
   color: #333;
   margin: 6px 0;
   border-radius: 3px;
-  -webkit-box-shadow: 0 2px 8px #cecdcd;
-          box-shadow: 0 2px 8px #cecdcd;
+  -webkit-box-shadow: 0 2px 3px #c7c7c7;
+          box-shadow: 0 2px 3px #c7c7c7;
   list-style: none;
   cursor: -webkit-grab;
 }

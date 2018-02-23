@@ -29,19 +29,23 @@ class ScrumController extends Controller
 
         $scrumLists = array('backlog', 'todo', 'doing', 'done');
         
-        $lists["backlog"] = $project->tasks->filter(function($t) {
+        $tasks = $project->tasks->filter(function($t) {
+            return !$t->completed();
+        });
+
+        $lists["backlog"] = $tasks->filter(function($t) {
             return $t->scrum_status == "backlog";
         });
 
-        $lists["todo"] = $project->tasks->filter(function($t) {
+        $lists["todo"] = $tasks->filter(function($t) {
             return $t->scrum_status == "todo";
         });
 
-        $lists["doing"] = $project->tasks->filter(function($t) {
+        $lists["doing"] = $tasks->filter(function($t) {
             return $t->scrum_status == "doing";
         });
 
-        $lists["done"] = $project->tasks->filter(function($t) {
+        $lists["done"] = $tasks->filter(function($t) {
             return $t->scrum_status == "done";
         });
 
