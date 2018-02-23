@@ -15,7 +15,7 @@ class AddScrumStatusToTasks extends Migration
     {
         Schema::table('tasks', function($table) {
             $table->string('scrum_status')->default('backlog');
-            $table->integer('scrum_sort');
+            $table->integer('scrum_sort')->default(0);
         });
     }
 
