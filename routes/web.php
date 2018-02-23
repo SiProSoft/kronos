@@ -18,9 +18,15 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
+Route::get('/scrum/p/{id}', 'ScrumController@index')->name('scrum');
 
 // Route::post('projects/{id}/start', ['uses' => 'ProjectsController@startTimer', 'as' => 'projects.start']);
 // Route::post('projects/{id}/stop', ['uses' => 'ProjectsController@stopTimer', 'as' => 'projects.stop']);
+
+// Scrum
+// Route::get('/scrum/sortlist', 'ScrumController@sortList')->name('scrum.sort');
+Route::post('/scrum/sortlist', 'ScrumController@sortList');
+
 
 // Timer
 Route::get('timer/start', 'TimerController@start')->name('timer.start');

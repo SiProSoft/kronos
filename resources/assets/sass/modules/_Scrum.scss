@@ -1,0 +1,48 @@
+$scrum--space-between-items: 6px;
+
+
+.scrum {
+
+    &--wrapper {
+        overflow: auto;
+    }
+
+    &--board {
+        width: 640px;
+        overflow: auto;
+    }
+
+    &--list-wrapper {
+        float: left;
+        margin-right: 20px;
+    }
+
+    &--list {
+        width: 140px;
+        background: #e0dada;
+        padding: 0 $scrum--space-between-items;
+        overflow: hidden;
+        min-height: 200px;
+        border-radius: 3px;
+    }
+
+    &--list-header {
+        color: #333;
+    }
+
+    &--list-item {
+        padding: 10px;
+        background: #fff;
+        color: #333;
+        margin: $scrum--space-between-items 0;
+        border-radius: 3px;
+        box-shadow: 0 2px 8px #cecdcd;
+        list-style: none;
+        cursor: -webkit-grab;
+
+        &.ui-sortable-helper {
+            box-shadow: 0 6px 21px #cccccc;
+            cursor: -webkit-grabbing;
+        }
+    }
+}

@@ -13,6 +13,9 @@
             @endif
         </div>
 
+        <div>
+            <a href="{{ route('scrum', $project->id) }}">Scrum</a>
+        </div>
         <hr>
         
         <div>

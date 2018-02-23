@@ -5,16 +5,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- CSRF Token -->
+    {{--  CSRF Token  --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Styles -->
+    {{--  Styles  --}}
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/datetimepicker.min.css') }}">
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 </head>
 <body>
     <div id="app">
@@ -33,15 +35,20 @@
         @endauth
     </div>
 
-    <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    
+    {{--  Scripts   --}}
+    <script src="{{ asset('js/app.js') }}"></script>
+
+    {{--  CDN  --}}
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/locale/fo.js"></script>
-    {{--  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>  --}}
-    
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
+
+    {{--  Plugins  --}}
     <script src="{{ asset('js/datetimepicker.min.js') }}"></script>
 
+
+    {{--  DateTime Picker code  --}}
     <script type="text/javascript">
 
         $(function () {
@@ -66,7 +73,51 @@
 
             $("#datetimepicker6").trigger('dp.change');
             $("#datetimepicker7").trigger('dp.change');
+
         });
+
+    </script>
+
+
+    {{--  Scrum Sortable  --}}
+    <script>
+        $( function() {
+            $( ".scrum--list" ).sortable({
+                connectWith: ".scrum--list",
+
+                stop: function(event, ui) {
+                    var list = [];
+
+                    var $ul = ui.item.parents('ul');
+                    var listtype = $ul.data('scrum-status');
+
+                    $ul.children().each(function() {
+                        list.push($(this).data('taskid'));
+                    });
+
+                    console.log(list);
+
+                    $.ajax({
+                        method: "post",
+                        url: "/scrum/sortlist",
+                        data: {
+                            'scrumStatus': listtype,
+                            'list': list
+                        },
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                    })
+                    .done(function( msg ) {
+                        console.log( msg );
+                    });
+
+                    {{--  console.log(ui.item);  --}}
+                    {{--  console.log(ui.sender);  --}}
+                }
+
+            }).disableSelection();
+        } );
     </script>
 </body>
 </html>
