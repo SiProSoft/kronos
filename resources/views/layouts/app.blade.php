@@ -117,7 +117,16 @@
                     {{--  console.log(ui.sender);  --}}
                 }
 
-            }).disableSelection();
+            }).disableSelection()
+            .bind('swipeleft',function(event, ui){
+                
+            }).bind('swiperight',function(event, ui){
+                
+            }).bind('swipeup',function(event, ui){
+                
+            }).bind('swipedown',function(event, ui){
+                
+            });
         } );
     </script>
 </body>
