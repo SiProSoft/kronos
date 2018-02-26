@@ -1088,6 +1088,10 @@ module.exports = __webpack_require__(45);
 
 __webpack_require__(12);
 
+$(function () {
+    __webpack_require__(56);
+});
+
 window.Vue = __webpack_require__(36);
 
 /**
@@ -43399,6 +43403,44 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 46 */,
+/* 47 */,
+/* 48 */,
+/* 49 */,
+/* 50 */,
+/* 51 */,
+/* 52 */,
+/* 53 */,
+/* 54 */,
+/* 55 */,
+/* 56 */
+/***/ (function(module, exports) {
+
+
+$('.navigation--collapse-toggle').on('click', function () {
+    toggleNavigation();
+});
+
+$('.navigation--darkened-layer').on('click', function () {
+    closeNavigation();
+});
+
+function toggleNavigation() {
+    $('.navigation--collapse-toggle').toggleClass('is-active');
+    $('body').toggleClass('navigation-open');
+}
+
+function openNavigation() {
+    $('.navigation--collapse-toggle').addClass('is-active');
+    $('body').addClass('navigation-open');
+}
+
+function closeNavigation() {
+    $('.navigation--collapse-toggle').removeClass('is-active');
+    $('body').removeClass('navigation-open');
+}
 
 /***/ })
 /******/ ]);

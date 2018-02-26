@@ -7,6 +7,10 @@
 
 require('./bootstrap');
 
+$(function() {
+    require('./modules/hamburger');
+});
+
 window.Vue = require('vue');
 
 /**

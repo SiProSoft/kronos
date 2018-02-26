@@ -1,0 +1,66 @@
+$navigation-background: #4b4e6a;
+$navigation-text-color: #fff;
+
+$navigation-padding: 15px;
+
+.navigation {
+    &--bar {
+        position: relative;
+        padding: $navigation-padding;
+        background: $navigation-background;
+        color: $navigation-text-color;
+        z-index: 1000;
+    }
+
+    &--collapse {
+        position: fixed;
+        top: 55px;
+        left: 0;
+        height: 100%;
+        background: darken($navigation-background, 5%);
+        min-width: 330px;
+        z-index: 1000;
+        padding: $navigation-padding;
+
+        margin-left: -330px;
+
+        transition: .3s margin ease-in-out;
+
+        body.navigation-open & {
+            margin-left: 0;
+        }
+    }
+
+    &--group {
+        list-style: none;
+        padding: 0;
+    
+        a {
+            color: $navigation-text-color;
+        }
+    }
+}
+
+.navigation--darkened-layer {
+    background: #0c0c0c;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 990;
+    opacity: 0;
+    visibility: hidden;
+    transition: .3s all ease-in-out;
+}
+
+.navigation-open .navigation--darkened-layer {
+    opacity: .8;
+    visibility: visible;
+}
+
+.hamburger {
+    position: relative;
+    top: 3px;
+    // outline: none;
+}

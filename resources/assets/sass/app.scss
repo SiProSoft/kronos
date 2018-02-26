@@ -8,9 +8,14 @@
 // Bootstrap
 @import "~bootstrap-sass/assets/stylesheets/bootstrap";
 
+// Hamburgers
+@import "HamburgerSettings";
+@import "~hamburgers/_sass/hamburgers/hamburgers";
+
 @import "main";
 
 @import "modules/FloatingTimerButton";
 @import "modules/MoreGroup";
 @import "modules/Nav--Timer";
+@import "modules/Navigation";
 @import "modules/Scrum";
