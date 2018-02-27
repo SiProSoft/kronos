@@ -5,10 +5,47 @@ $navigation-padding: 15px;
 
 .navigation {
 
-    margin-bottom: 30px;
+    margin-bottom: 90px;
+
     
+    &--cover-image {
+        width: 330px;
+        // margin: -15px -15px 15px;
+        background: url(http://billhobbs.com/wp-content/uploads/2013/08/utah-sky-4I7C7611.jpg);
+        padding-top: 120px;
+        background-position: 50% 50%;
+        background-size: cover;
+
+        img {
+            width: 100%;
+        }
+        
+    }
+
+    &--cover-name {
+        padding: 15px;
+        color: #fff;
+        background: rgba(0, 0, 0, 0.53);
+    }
+
+    &--profile-image {
+        height: 50px;
+        overflow: hidden;
+        border-radius: 100%;
+        width: 50px;
+        position: absolute;
+        top: 15px;
+        left: 15px;
+    }
+
     &--bar {
-        position: relative;
+
+        position: fixed;
+        top: 0;
+        left: 0;
+
+        width: 100%;
+
         padding: $navigation-padding;
         background: $navigation-background;
         color: $navigation-text-color;
@@ -23,7 +60,7 @@ $navigation-padding: 15px;
         background: darken($navigation-background, 5%);
         min-width: 330px;
         z-index: 1000;
-        padding: $navigation-padding;
+        // padding: $navigation-padding;
 
         margin-left: -330px;
 
@@ -38,9 +75,36 @@ $navigation-padding: 15px;
         list-style: none;
         padding: 0;
     
+        &-item 
+        {
+
+            .material-icons {
+                vertical-align: top;
+                padding-right: 7px;
+            }
+
+            &.active a {
+                background: darken($navigation-background, 10%);
+            }
+
+            a {
+
+            padding: 15px;
+            display: inline-block;
+            width: 100%;
+            text-decoration: none;
+
+                &:hover {
+                    background: darken($navigation-background, 10%);
+                }
+            }
+        }
+
         a {
             color: $navigation-text-color;
         }
+
+
     }
 }
 

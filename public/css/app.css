@@ -9909,11 +9909,42 @@ body {
 }
 
 .navigation {
-  margin-bottom: 30px;
+  margin-bottom: 90px;
+}
+
+.navigation--cover-image {
+  width: 330px;
+  background: url(http://billhobbs.com/wp-content/uploads/2013/08/utah-sky-4I7C7611.jpg);
+  padding-top: 120px;
+  background-position: 50% 50%;
+  background-size: cover;
+}
+
+.navigation--cover-image img {
+  width: 100%;
+}
+
+.navigation--cover-name {
+  padding: 15px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.53);
+}
+
+.navigation--profile-image {
+  height: 50px;
+  overflow: hidden;
+  border-radius: 100%;
+  width: 50px;
+  position: absolute;
+  top: 15px;
+  left: 15px;
 }
 
 .navigation--bar {
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
   padding: 15px;
   background: #4b4e6a;
   color: #fff;
@@ -9928,7 +9959,6 @@ body {
   background: #40435b;
   min-width: 330px;
   z-index: 1000;
-  padding: 15px;
   margin-left: -330px;
   -webkit-transition: .3s margin ease-in-out;
   transition: .3s margin ease-in-out;
@@ -9941,6 +9971,26 @@ body.navigation-open .navigation--collapse {
 .navigation--group {
   list-style: none;
   padding: 0;
+}
+
+.navigation--group-item .material-icons {
+  vertical-align: top;
+  padding-right: 7px;
+}
+
+.navigation--group-item.active a {
+  background: #36384c;
+}
+
+.navigation--group-item a {
+  padding: 15px;
+  display: inline-block;
+  width: 100%;
+  text-decoration: none;
+}
+
+.navigation--group-item a:hover {
+  background: #36384c;
 }
 
 .navigation--group a {

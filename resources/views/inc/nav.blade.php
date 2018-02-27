@@ -3,48 +3,51 @@
     <div class="navigation--darkened-layer"></div>
 
     <div class="navigation--bar">
-        {{--  <a href="#" class="navigation--collapse-toggle">menu</a>  --}}
 
-        <a class="navigation--collapse-toggle hamburger hamburger--elastic" aria-label="Menu" aria-controls="navigation">
+        <a class="navigation--collapse-toggle hamburger hamburger--slider" aria-label="Menu" aria-controls="navigation">
             <span class="hamburger-box">
                 <span class="hamburger-inner"></span>
             </span>
         </a>
-{{--  
-        <a class="navigation--logo" href="{{ route('dashboard') }}">
-            {{ config('app.name', 'Laravel') }} 
-        </a>  --}}
-{{--  
-        @auth
-        <span>{{ Auth::user()->name }}</span>
-        @endauth  --}}
     </div>
 
-
     <div class="navigation--collapse">
-        
+        <div class="navigation--cover-image">
+            <div class="navigation--profile-image">
+                <img src="https://www.easyflow.dk/media/1060/signar_web.jpg?width=360&height=418" alt="">
+            </div>
+            <div class="navigation--cover-name">{{ Auth::user()->name }}</div>
+        </div>
+
         @auth
-        <ul class="navigation--group">
-            <li><a href="#">{{ Auth::user()->name }}</a></li>
-        </ul>
+        
+        @php
+            $navigationItems = array(
+                array('title' => 'Dashboard', 'url' => route('dashboard'), 'icon' => 'dashboard'),
+                array('title' => 'Projects', 'url' => route('projects.index'), 'icon' => 'apps'),
+                array('title' => 'Tasks', 'url' => route('tasks.index'), 'icon' => 'check'),
+                array('title' => 'Time Entries', 'url' => route('timeentries.index'), 'icon' => 'access_time'),
+            );
+        @endphp
 
         <ul class="navigation--group">
-            <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
-            <li><a href="{{ route('projects.index') }}">Projects</a></li>
-            <li><a href="{{ route('tasks.index') }}">Tasks</a></li>
-            <li><a href="{{ route('timeentries.index') }}">Time Entries</a></li>
+            @foreach ($navigationItems as $item)
+                <li class="navigation--group-item {{ url()->current() == $item['url'] ? 'active' : ''}}">
+                    <a href="{{$item['url']}}">
+                        <i class="material-icons">{{$item['icon']}}</i>{{$item['title']}}
+                    </a>
+                </li>
+            @endforeach
         </ul>
         @endauth
 
 
-        <!-- Right Side Of Navbar -->
         <ul class="navigation--group">
-            <!-- Authentication Links -->
             @guest
-                <li><a href="{{ route('login') }}">Login</a></li>
-                <li><a href="{{ route('register') }}">Register</a></li>
+                <li class="navigation--group-item"><a href="{{ route('login') }}">Login</a></li>
+                <li class="navigation--group-item"><a href="{{ route('register') }}">Register</a></li>
             @else
-                <li>
+                <li class="navigation--group-item">
                     <a href="{{ route('logout') }}"
                         onclick="event.preventDefault();
                                     document.getElementById('logout-form').submit();">
