@@ -1,14 +1,16 @@
-@extends('layouts.app')
+@extends('layouts.project')
 
 @section('content')
 <div class="container projects--show">
     <div class="more-group--project-wrapper pull-right">
         @include('inc.projects.more-button')
     </div>
-    
+
+    @parent
+    {{--      
     <h3>
         {{ $project->title }}
-    </h3>
+    </h3>  --}}
 
     <div>
         {{ $project->description }}

@@ -1,9 +1,21 @@
-@extends('layouts.app')
+@extends('layouts.project')
+{{--  
+@section('sidebar')
+
+    <p>This is appended to the master sidebar.</p>
+@stop  --}}
 
 @section('content')
 <div class="container scrum">
-    <h1>Scrum</h1>
-    <h4>{{$project->title}}</h4>
+    @parent
+
+    <div class="small">
+        <a href="{{ route('projects.show', $project->id)}}">back to project page</a>
+    </div>
+
+    <hr>
+    {{--  <h1 class="h3">{{$project->title}}</h1>  --}}
+    {{--  <h4></h4>  --}}
 
     <div class="scrum--wrapper">
 

@@ -110,7 +110,8 @@ class ProjectsController extends Controller
         $tasks = $project->tasks->filter(function($t) {
             return !$t->completed();
         });
-
+        $tasks = $tasks->sortByDesc('created_at');
+        
         return view('projects.show')->with([
             'project' => $project, 
             'runningTimeEntry' => $runningTimeEntry, 
