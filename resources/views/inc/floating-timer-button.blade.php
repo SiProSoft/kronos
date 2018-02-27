@@ -9,11 +9,11 @@
         </div>
 
     @else
-        <div class="floating-timer-button--options-button">
+        {{--  <div class="floating-timer-button--options-button">
             <a href="#">
                 <i class="material-icons">more_vert</i>
             </a>
-        </div>
+        </div>  --}}
     @endif
     
 
