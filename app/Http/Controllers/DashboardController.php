@@ -25,20 +25,10 @@ class DashboardController extends Controller
     public function index()
     {
         $user = auth()->user();
-
-        $timeEntries = TimeEntry::where('user_id', $user->id)->whereNotNull('end')->get();
-
-        $sumInSeconds = getSumInSecondsFromTimeEntries($timeEntries);
-        $sumFormated = showAsTime($sumInSeconds);
+        $company = 'SiProSoft';
         
-        $selectProjects = $user->projects->mapWithKeys(function($project) {
-            return [$project->id => $project->title];
-        });
-
         return view('dashboard')->with([
-            'timeEntries' => $timeEntries, 
-            'sum' => $sumFormated, 
-            'selectProjects' => $selectProjects
+            'company' => $company
         ]);
     }
 }
