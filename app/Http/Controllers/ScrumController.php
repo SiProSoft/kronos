@@ -49,7 +49,7 @@ class ScrumController extends Controller
             return $t->scrum_status == "done";
         });
 
-        return view('scrum')->with(['project' => $project, 'lists' => $lists]);
+        return view('projects.scrum')->with(['project' => $project, 'lists' => $lists]);
     }
 
     public function sortList(Request $request) {

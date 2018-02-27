@@ -9908,6 +9908,10 @@ body {
   margin: 2px 0;
 }
 
+.navigation {
+  margin-bottom: 30px;
+}
+
 .navigation--bar {
   position: relative;
   padding: 15px;
