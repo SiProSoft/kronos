@@ -12,7 +12,7 @@
     </div>
 
     <div class="navigation--collapse">
-        <div class="navigation--cover-image">
+        <div class="navigation--cover-image" style="background-image: url({{ asset('img/background/1.jpeg') }})">
             <div class="navigation--profile-image">
                 <img src="https://www.easyflow.dk/media/1060/signar_web.jpg?width=360&height=418" alt="">
             </div>
