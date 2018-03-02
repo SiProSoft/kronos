@@ -19,12 +19,12 @@ class AddCompanyIdToUsers extends Migration
             $table->integer('company_id')->default(0);
         });
         
-        $user = new User;
-        $user->name = "Signar Kristiansen";
-        $user->email = "signar@siprosoft.com";
-        $user->password = '$2y$10$PIplAFzPnI/HVprjKUHF/OW4MZjfmloOZpr4N2bZTsH0B2TcnCetq';
-        $user->is_superuser = true;
-        $user->save();
+        // $user = new User;
+        // $user->name = "Signar Kristiansen";
+        // $user->email = "signar@siprosoft.com";
+        // $user->password = '$2y$10$PIplAFzPnI/HVprjKUHF/OW4MZjfmloOZpr4N2bZTsH0B2TcnCetq';
+        // $user->is_superuser = true;
+        // $user->save();
     }
 
     /**
