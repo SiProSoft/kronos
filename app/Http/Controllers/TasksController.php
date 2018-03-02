@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Task;
+use App\Company;
 use App\Project;
+
+use App\Scopes\HiddenScope;
 
 class TasksController extends Controller
 {
@@ -16,13 +19,9 @@ class TasksController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('access:task')->only('show', 'edit', 'update', 'destroy');
     }
 
-    public function getTasks($id) {
-        // $tasks = Task::withoutGlobalScopes()->where('project_id', $id)->get();
-        $tasks = Project::withoutGlobalScopes()->find($id)->getTasksWithoutGlobalScopes();
-        return $tasks;
-    }
     
     /**
      * Display a listing of the resource.
@@ -33,22 +32,17 @@ class TasksController extends Controller
     {
         $user = auth()->user();
 
-        // $tasks = auth()->user()->tasks->sortBy('completed')->thenByDesc('created_at');
-        $projects = auth()->user()->projects->pluck('title', 'id');
-        
-        $tasks["completed"] = $user->tasks->filter(function($t) {
+        $taskss = Task::forCompany()->visible()->get();
+
+        $tasks["completed"] = $taskss->filter(function($t) {
             return $t->completed_at != null;
-        });
+        })->sortByDesc('completed_at');
 
-        $tasks["incompleted"] = $user->tasks->filter(function($t) {
+        $tasks["incompleted"] = $taskss->filter(function($t) {
             return $t->completed_at == null;
-        });
+        })->sortByDesc('created_at');
 
-        $tasks["completed"] = $tasks["completed"]->sortByDesc('completed_at');
-        $tasks["incompleted"] = $tasks["incompleted"]->sortByDesc('created_at');
-
-        // return $tasks;
-        return view('tasks.index')->with(['tasks' => $tasks, 'projects' => $projects]);
+        return view('tasks.index')->with(['tasks' => $tasks]);
     }
 
     /**
@@ -58,7 +52,7 @@ class TasksController extends Controller
      */
     public function create()
     {
-        $projects = auth()->user()->projects->pluck('title', 'id');
+        $projects = Project::forCompany(company())->get()->pluck('title', 'id');
         return view('tasks.create')->with('projects', $projects);
     }
 
@@ -103,7 +97,12 @@ class TasksController extends Controller
     public function edit($id)
     {
         $task = Task::find($id);
-        $projects = auth()->user()->projects->pluck('title', 'id');
+
+        if (!$this->checkTask($task)) {
+            return redirect(route('tasks.index'));
+        }
+        
+        $projects = Project::withoutGlobalScope(HiddenScope::class)->pluck('title', 'id');
         return view('tasks.edit')->with(['task' => $task, 'projects' => $projects]);
     }
 
@@ -117,8 +116,12 @@ class TasksController extends Controller
     public function update(Request $request, $id)
     {
         $this->validateTask($request);
-
         $task = Task::find($id);
+        
+        if (!$this->checkTask($task)) {
+            return redirect(route('tasks.index'));
+        }
+
         $this->updateTask($task, $request);
 
         if ($request->input('redirect')) {
@@ -145,6 +148,11 @@ class TasksController extends Controller
     public function destroy($id)
     {
         $task = Task::find($id);
+
+        if (!$this->checkTask($task)) {
+            return redirect(route('tasks.index'));
+        }
+        
         $task->delete();
 
         return redirect(url()->previous())->with('success', 'Task deleted');
@@ -156,6 +164,11 @@ class TasksController extends Controller
         // $this->completeTask($id);
 
         $task = Task::find($id);
+        
+        if (!$this->checkTask($task)) {
+            return redirect(route('tasks.index'));
+        }
+
         $task->completed_at = NOW();
         $task->save();
 
@@ -164,6 +177,11 @@ class TasksController extends Controller
 
     public function incomplete($id) {
         $task = Task::find($id);
+        
+        if (!$this->checkTask($task)) {
+            return redirect(route('tasks.index'));
+        }
+
         $task->completed_at = null;
         $task->save();
 
@@ -195,8 +213,15 @@ class TasksController extends Controller
         $task->save();
     }
 
-    // private function completeTask($id) {
-        
-    // }
+    
+    public function getTasksForDropdown($id) {
+        $tasks = Task::forProject($id)->get();
+        return $tasks;
+    }
+
+    public function checkTask($task) {
+        $project = Project::withoutGlobalScope(HiddenScope::class)->find($task->project_id);
+        return $project;        
+    }
 
 }

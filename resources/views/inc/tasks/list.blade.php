@@ -9,7 +9,7 @@
             @if ($viewMode == "tasks")
                 <span> - </span>
             
-                @if ($task->project->id != auth()->user()->getDefaultProject()->id)
+                @if ($task->project->id != auth()->user()->company->getDefaultProject()->id)
                     <a href="{{route('projects.show', $task->project->id )}}">{{ $task->project->title }}</a>
                 @else
                     {{ $task->project->title }}

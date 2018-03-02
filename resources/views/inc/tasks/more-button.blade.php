@@ -35,6 +35,7 @@
             <div class="">
                 {!! Form::open(['action' => ['TasksController@destroy', $task->id], 'method' => 'POST']) !!}
                     {{Form::hidden('_method', 'DELETE')}}
+                    {{--  {{Form::hidden('redirect', url()->current())}}  --}}
                     {{Form::submit('Delete', ['class' => 'btn btn-danger'])}}
                 {!! Form::close() !!}
             </div>

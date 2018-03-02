@@ -28,6 +28,7 @@
                     <ul class="scrum--list" data-scrum-status="{{ $key }}">
                         @foreach ($list->sortBy('scrum_sort') as $task)
                             <li class="scrum--list-item" data-taskid="{{$task->id}}">
+                                <span class="pull-right">@include('inc.tasks.more-button', ['task' => $task])</span>
                                 {{ $task->title }}
                             </li>
                         @endforeach

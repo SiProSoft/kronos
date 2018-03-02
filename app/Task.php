@@ -19,8 +19,6 @@ class Task extends Model
         'scrum_sort'
     ];
 
-
-
     /**
      * The attributes that should be cast to native types.
      *
@@ -29,6 +27,38 @@ class Task extends Model
     protected $casts = [
         'is_hidden' => 'boolean',
     ];
+
+
+    
+    /**
+     * Scope a query to exclude hidden projects.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeVisible($query)
+    {
+        return $query->where('is_hidden', false);
+    }
+
+    /**
+     * Scope a query to only include tasks attached to a specific company.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeForCompany($query)
+    {
+        return $query->whereHas('project', function($q) {
+            $q->where('projects.company_id', company()->id);
+        });
+    }
+
+    public function scopeForProject($query, $projectId)
+    {
+        return $query->where('project_id', $projectId);
+    }
+    
 
     public function project() {
         return $this->belongsTo('App\Project')->withoutGlobalScopes();
@@ -106,13 +136,6 @@ class Task extends Model
     
     public function displaySum() {
         $time = $this->getTotalTimeSpent();
-        
-        // foreach ($this->timeEntries as $te) {
-        //     if ($te->end) {
-        //         $time += $te->getTime();
-        //     }
-        // } 
-        
         $sum = sprintf('%02d:%02d:%02d', ($time/3600),($time/60%60), $time%60);
 
         return $sum;
@@ -123,8 +146,8 @@ class Task extends Model
     public static function boot()
     {
         parent::boot();
-        static::addGlobalScope(new HiddenScope);
-        
+        // static::addGlobalScope(new HiddenScope);
+
         self::deleting(function($model) {
             $timeEntries = TimeEntry::withoutGlobalScopes()->where('task_id', $model->id)->get();
 

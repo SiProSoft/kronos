@@ -1,3 +1,16 @@
+@php
+    $navigationItems = array(
+        array('title' => 'Dashboard', 'url' => route('dashboard'), 'icon' => 'dashboard'),
+        array('title' => 'Companies', 'url' => route('companies.index'), 'icon' => 'account_balance'),
+        array('title' => 'Projects', 'url' => route('projects.index'), 'icon' => 'apps'),
+        array('title' => 'Tasks', 'url' => route('tasks.index'), 'icon' => 'check'),
+        array('title' => 'Time Entries', 'url' => route('timeentries.index'), 'icon' => 'access_time'),
+    );
+
+    $user = Auth::user();
+    $company = company();
+@endphp
+
 
 <nav class="navigation">
     <div class="navigation--darkened-layer"></div>
@@ -14,21 +27,21 @@
     <div class="navigation--collapse">
         <div class="navigation--cover-image" style="background-image: url({{ asset('img/background/1.jpeg') }})">
             <div class="navigation--profile-image">
-                <img src="https://www.easyflow.dk/media/1060/signar_web.jpg?width=360&height=418" alt="">
+                <img src="{{ asset('img/no-profile-photo.jpg') }}" alt="">
             </div>
-            <div class="navigation--cover-name">{{ Auth::user()->name }}</div>
+            <div class="navigation--cover-name">
+
+                @if ($company)
+                    <div class="navigation--cover-company">{{ $company->title }}</div>
+                @endif
+
+            <span class="{{ $company ? 'small' : ''}}">{{ $user->name }}</span>
+            
+            </div>
         </div>
 
         @auth
         
-        @php
-            $navigationItems = array(
-                array('title' => 'Dashboard', 'url' => route('dashboard'), 'icon' => 'dashboard'),
-                array('title' => 'Projects', 'url' => route('projects.index'), 'icon' => 'apps'),
-                array('title' => 'Tasks', 'url' => route('tasks.index'), 'icon' => 'check'),
-                array('title' => 'Time Entries', 'url' => route('timeentries.index'), 'icon' => 'access_time'),
-            );
-        @endphp
 
         <ul class="navigation--group">
             @foreach ($navigationItems as $item)

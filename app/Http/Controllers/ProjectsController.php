@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Project;
 use App\TimeEntry;
 
+use App\Scopes\HiddenScope;
+
 class ProjectsController extends Controller
 {
     /**
@@ -17,18 +19,9 @@ class ProjectsController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('access:project')->only('show', 'edit', 'update', 'destroy');
     }
     
-
-    public function getProjects() {
-        // $currentProject = TimeEntry::find($id)->task->project;
-        $projects = auth()->user()->projectsWithoutHiddenScope();
-
-        // $result = array();
-        // $result["current"] = $currentProject;
-        // $result["all"] = $projects;
-        return $projects;
-    }
     /**
      * Display a listing of the resource.
      *
@@ -36,7 +29,8 @@ class ProjectsController extends Controller
      */
     public function index()
     {
-        $projects = auth()->user()->projects;
+        // $projects = Project::all();
+        $projects = Project::forCompany()->visible()->get();
         return view('projects.index')->with('projects', $projects);
     }
 
@@ -60,25 +54,12 @@ class ProjectsController extends Controller
     {
         $this->validateProject($request);
 
-        $project = new Project;
+        $project = new Project;        
         $this->updateProject($project, $request);
 
-        return redirect(route('projects.index'));
+        return redirect(route('projects.index'))->with('success', 'Project created');
     }
 
-    private function validateProject($request) {
-        $this->validate($request, [
-            'title' => 'required',
-            // 'description' => 'required',
-        ]);
-    }
-
-    private function updateProject($project, $request) {
-        $project->title = $request->input('title');
-        $project->description = $request->input('description') ?? "";
-        $project->user_id = auth()->user()->id;
-        $project->save();
-    }
 
     /**
      * Display the specified resource.
@@ -88,33 +69,23 @@ class ProjectsController extends Controller
      */
     public function show($id)
     {
-
         $user = auth()->user();
-
-        $runningTimeEntry = $user->getRunningTimeEntry();
 
         $project = Project::find($id);
 
-        if (!$project) {
-            return redirect(route('projects.index'));
-        }
-        
         $timeEntries = $project->timeEntries()->filter(function($time) {
             return $time->end != null;
         });
 
         $sumInSeconds = getSumInSecondsFromTimeEntries($timeEntries);
-        
         $sumFormatted = showAsTime($sumInSeconds);
 
         $tasks = $project->tasks->filter(function($t) {
             return !$t->completed();
-        });
-        $tasks = $tasks->sortByDesc('created_at');
+        })->sortByDesc('created_at');
         
         return view('projects.show')->with([
             'project' => $project, 
-            'runningTimeEntry' => $runningTimeEntry, 
             'timeEntries' => $timeEntries,
             'tasks' => $tasks,
             'sum' => $sumFormatted
@@ -148,7 +119,6 @@ class ProjectsController extends Controller
         $this->updateProject($project, $request);
 
         return redirect(route('projects.index'));
-
     }
 
     /**
@@ -165,33 +135,29 @@ class ProjectsController extends Controller
         return redirect(route('projects.index'));
     }
 
-    // public function startTimer($id) {
-    //     $userId = auth()->user()->id;
 
-    //     $runningTimeEntry = TimeEntry::where(['user_id' => $userId , 'end' => null])->first();
 
-    //     if ($runningTimeEntry) {
-    //         $runningTimeEntry->end = NOW();
-    //         $runningTimeEntry->save();
-    //     }
+    private function validateProject($request) {
+        $this->validate($request, [
+            'title' => 'required',
+            // 'description' => 'required',
+        ]);
+    }
 
-    //     $timeEntry = new TimeEntry;
-    //     $timeEntry->start = NOW();
-    //     $timeEntry->task_id = $id > 0 ? $id : null;
-    //     $timeEntry->user_id = $userId;
-    //     $timeEntry->save();
-        
-    //     return redirect(url()->previous());
-    // }
+    private function updateProject($project, $request) {
+        $project->title = $request->input('title');
+        $project->description = $request->input('description') ?? "";
+        $project->user_id = $project->user_id ?? auth()->user()->id;
+        $project->company_id = $project->company_id ?? company()->id;
+        $project->save();
+    }
+    
 
-    // public function stopTimer($id) {
-    //     $timeEntry = TimeEntry::find($id);
-
-    //     if ($timeEntry) {
-    //         $timeEntry->end = NOW();
-    //         $timeEntry->save();
-    //     }
-
-    //     return redirect(url()->previous());
-    // }
+    
+    // TODO: Move to API (ProjectResource)
+    public function getProjectsForDropdown() {
+        $projects = Project::forCompany()->get();
+        return $projects;
+    }
+    
 }

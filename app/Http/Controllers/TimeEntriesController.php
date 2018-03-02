@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\TimeEntry;
 use App\Task;
+use App\Project;
 
 class TimeEntriesController extends Controller
 {
@@ -16,6 +17,7 @@ class TimeEntriesController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('access:timeentry')->only('show', 'edit', 'update', 'destroy');
     }
 
     /**
@@ -25,9 +27,8 @@ class TimeEntriesController extends Controller
      */
     public function index()
     {
-        $user = auth()->user();
 
-        $timeEntries = $user->getTimeEntries()->sortByDesc('start');
+        $timeEntries = TimeEntry::forCompany()->get();
 
         return view('timeentries.index')->with('timeEntries', $timeEntries);
     }
@@ -72,22 +73,21 @@ class TimeEntriesController extends Controller
      */
     public function edit($id)
     {
-        $userId = auth()->user()->id;
+        // $userId = auth()->user()->id;
         
         $timeEntry = TimeEntry::find($id);
-        $projects = auth()->user()->projectsWithoutHiddenScope()->mapWithKeys(function($p) {
-            return [$p->id => $p->title];
-        });
+        // $projects = Project::forCompany
 
         // return $projects->toArray();
-        $tasks = $timeEntry->getProject()->getTasksWithoutGlobalScopes()->mapWithKeys(function($t) {
-            return [$t->id => $t->title];
-        });
+        // $tasks = $timeEntry->getProject()->getTasksWithoutGlobalScopes()->mapWithKeys(function($t) {
+        //     return [$t->id => $t->title];
+        // });
         
         return view("timeentries.edit")->with(
             ['timeEntry' => $timeEntry,
-            'projects' => $projects,
-            'tasks' => $tasks]);
+            // 'projects' => $projects,
+            // 'tasks' => $tasks
+            ]);
     }
 
     /**

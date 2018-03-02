@@ -20,7 +20,7 @@ $action = $task ? ['TasksController@update', $task->id] : 'TasksController@store
 
 <div class="form-group">
     {{ Form::label('project', 'Project' ) }}
-    {{ Form::select('project', auth()->user()->projectsWithoutHiddenScope()->pluck('title', 'id'), $task && $task->project ? $task->project->id : null, ['class' => 'form-control']) }}
+    {{ Form::select('project', $projects /*company()->getProjectsWithoutScopes()->pluck('title', 'id')*/, $task && $task->project ? $task->project->id : null, ['class' => 'form-control']) }}
 </div>
 
 <div class="form-group">

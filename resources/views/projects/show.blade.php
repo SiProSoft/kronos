@@ -7,10 +7,6 @@
     </div>
 
     @parent
-    {{--      
-    <h3>
-        {{ $project->title }}
-    </h3>  --}}
 
     <div>
         {{ $project->description }}

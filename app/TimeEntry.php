@@ -11,6 +11,16 @@ class TimeEntry extends Model
         return $this->belongsTo('App\Task')->withoutGlobalScopes();
     }
 
+    public function scopeForCompany($query) {
+        return $query->whereHas('task', function($q1) {
+            // dd($this);
+            $q1->whereHas('project', function($q2) {
+                $q2->where('projects.company_id', company()->id);
+                
+            });
+        });
+    }
+
     public function getProject() {
         $task = $this->task;
         $project = $task ? $task->project : null;
@@ -26,4 +36,5 @@ class TimeEntry extends Model
         $seconds = $this->getTime();
         return showAsTime($seconds);
     }
+
 }

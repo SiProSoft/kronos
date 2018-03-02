@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\TimeEntry;
+use App\Company;
 
 class DashboardController extends Controller
 {
@@ -25,10 +26,26 @@ class DashboardController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $company = 'SiProSoft';
-        
+        $company = $user->company;
+
         return view('dashboard')->with([
             'company' => $company
         ]);
+    }
+
+    public function storeCompany(Request $request) {
+        $this->validate($request, [
+            'title' => 'required',
+        ]);
+        
+        $company = new Company;
+        $company->title = $request->input('title');
+        $company->user_id = auth()->user()->id;
+        $company->save();
+
+        $user = auth()->user();
+        $user->companies()->attach($company->id);
+        
+        return redirect(route('dashboard'));
     }
 }

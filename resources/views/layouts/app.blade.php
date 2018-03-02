@@ -27,7 +27,6 @@
             @include('inc.messages')
         </div>
 
-        
         @yield('content')
 
         @auth

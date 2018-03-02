@@ -33,6 +33,7 @@ class ScrumController extends Controller
             return !$t->completed();
         });
 
+        // TODO: each loop with the "use" argument
         $lists["backlog"] = $tasks->filter(function($t) {
             return $t->scrum_status == "backlog";
         });

@@ -9763,6 +9763,23 @@ body {
   color: #a9a3a3;
 }
 
+.company--member {
+  float: left;
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.company--member img {
+  width: 100%;
+}
+
+.company--logo {
+  max-width: 260px;
+}
+
 .floating-timer-button {
   position: fixed;
   bottom: 50px;

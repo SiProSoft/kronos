@@ -7,6 +7,8 @@ use App\TimeEntry;
 use App\Project;
 use App\Task;
 
+use App\Scopes\HiddenScope;
+
 class TimerController extends Controller
 {
     /**
@@ -25,18 +27,16 @@ class TimerController extends Controller
 
         $timeEntry = new TimeEntry;
  
-        $project = Project::withoutGlobalScopes()->find($request->input('task'));
+        $project = Project::withoutGlobalScope(HiddenScope::class)->find($request->input('task'));
         if (!$project) {
-            $project = auth()->user()->getDefaultProject();
+            $project = company()->getDefaultProject();
         }
-
         
-        $task = Task::withoutGlobalScopes()->find($request->input('task'));
+        $task = Task::withoutGlobalScope(HiddenScope::class)->find($request->input('task'));
 
         if (!$task) {
             $task = $project->getDefaultTask();
         }
-        // return $task;
 
         $timeEntry->start = NOW();
         $timeEntry->user_id = auth()->user()->id;
@@ -49,7 +49,6 @@ class TimerController extends Controller
 
     public function stop() {
         $this->stopTimer();
-        
         return redirect(url()->previous());
     }
 

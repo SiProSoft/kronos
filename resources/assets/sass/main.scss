@@ -29,3 +29,20 @@ body {
         color: #a9a3a3;
     }
 }
+
+.company--member {
+    float: left;
+    // background: #c1c1c1;
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    overflow: hidden;
+    border-radius: 2px;
+    img {
+        width: 100%;
+    }
+}
+
+.company--logo {
+    max-width: 260px;
+}

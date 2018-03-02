@@ -15,3 +15,19 @@ function getSumInSecondsFromTimeEntries($timeEntries) {
 
     return $timeSum;
 }
+
+function company() {
+    return auth()->user()->company;
+}
+
+function ensureCompany() {
+
+    echo "Ensure company";
+
+    if (!auth()->user()->company) {
+        auth()->user()->company_id = auth()->user()->getDefaultCompany()->id;
+        auth()->user()->save();
+    }
+
+    // return auth()->user()->company;
+}

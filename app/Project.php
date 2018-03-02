@@ -2,8 +2,10 @@
 
 namespace App;
 
-use App\Scopes\HiddenScope;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+
+use App\Scopes\HiddenScope;
 
 class Project extends Model
 {
@@ -16,7 +18,34 @@ class Project extends Model
         'is_hidden' => 'boolean',
     ];
 
+    
+    /**
+     * Scope a query to exclude hidden projects.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeVisible($query)
+    {
+        return $query->where('is_hidden', false);
+    }
+    
+    public function user() {
+        return $this->belongsTo('App\User');
+    }
 
+    public function company() {
+        return $this->belongsTo('App\Company')->withoutGlobalScope(HiddenScope::class);
+    }
+
+    public function tasks() {
+        return $this->hasMany('App\Task'); 
+    }
+    
+    public function tasksWithoutHiddenScope() {
+        return $this->hasMany('App\Task', 'project_id')->withoutGlobalScope(HiddenScope::class); 
+    }
+    
     public function timeEntries() {
         $tasks = Task::withoutGlobalScopes()->where('project_id', $this->id)->get();
 
@@ -26,29 +55,37 @@ class Project extends Model
 
         return $result->collapse();
     }
-    
-    public function tasks() {
-        return $this->hasMany('App\Task'); 
-    }
-
-    public function getTasksWithoutGlobalScopes() {
-        return Task::withoutGlobalScopes()->where('project_id', $this->id)->get();
-    }
-
-    public function user() {
-        return $this->belongsTo('App\User');
-    }
 
     public function getDefaultTask() {
         return Task::withoutGlobalScopes()->where(['project_id' => $this->id, 'is_hidden' => true])->first();
     }
 
+    public function scopeForCompany($query, $company = null) {
+        $company = $company ?? company();
+        return $query->where('company_id', $company->id);
+    }
+
+    // public function scopeForCurrentCompany($query) {
+    //     return $query->forCompany(company());
+    // }
+
+    
+    // public function getTasksWithoutGlobalScopes() {
+    //     return Task::withoutGlobalScopes()->where('project_id', $this->id)->get();
+    // }
+
 
     public static function boot()
     {
         parent::boot();
-        static::addGlobalScope(new HiddenScope);
+        // static::addGlobalScope(new HiddenScope);
 
+        // static::addGlobalScope('company', function (Builder $builder) {
+        //     $builder->where('company_id', '=', auth()->user()->company->id);
+        // });
+
+
+        
         self::creating(function($model){
             // ... code here
         });

@@ -2,8 +2,12 @@
 
 @section('content')
 <div class="container">
-    <h1>Company: {{$company}}</h1>
-    <h2 class="h4">User: Signar</h2>
+
+    @if ($company)
+    <h1>Company: {{$company->title}}</h1>
+    <h2 class="h4">User: {{$company->owner->name }}</h2>
+    @endif
+
 
 </div>
 @endsection
