@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Project;
+use App\Task;
 use App\TimeEntry;
 
 use App\Scopes\HiddenScope;
@@ -80,9 +81,7 @@ class ProjectsController extends Controller
         $sumInSeconds = getSumInSecondsFromTimeEntries($timeEntries);
         $sumFormatted = showAsTime($sumInSeconds);
 
-        $tasks = $project->tasks->filter(function($t) {
-            return !$t->completed();
-        })->sortByDesc('created_at');
+        $tasks = Task::forProject($project->id)->visible()->incompleted()->get()->sortByDesc('created_at');
         
         return view('projects.show')->with([
             'project' => $project, 

@@ -58,6 +58,18 @@ class Task extends Model
     {
         return $query->where('project_id', $projectId);
     }
+
+    
+    public function scopeCompleted($query)
+    {
+        return $query->whereNotNull('completed_at');
+    }
+    
+    
+    public function scopeIncompleted($query)
+    {
+        return $query->whereNull('completed_at');
+    }
     
 
     public function project() {
